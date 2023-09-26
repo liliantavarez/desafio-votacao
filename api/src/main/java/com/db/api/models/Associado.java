@@ -32,4 +32,8 @@ public class Associado {
         this.nome = nome;
         this.cpf = cpf;
     }
+
+    public void setStatusCPF(StatusCPF statusCPF) {
+        this.statusCPF = statusCPF;
+    }
 }
