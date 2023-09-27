@@ -31,25 +31,13 @@ public class VotoService {
         validarParametros(votoDto);
 
         Sessao sessao = sessaoService.validarSessao(votoDto.getSessao_id());
-        Associado associado = validarAssociado(votoDto.getAssociado().getCpf());
+        Associado associado = associadoService.validarAssociado(votoDto.getAssociado().getCpf());
 
         Voto voto = new Voto(sessao, associado, votoDto.getVotoEnum());
         votoRepository.save(voto);
 
     }
 
-    @Transactional
-    public Associado validarAssociado(String cpfAssociado) {
-        Associado associado = associadoService.buscarAssociadoPorCPF(cpfAssociado);
-
-        if (associado.getStatusCPF() == StatusCPF.UNABLE_TO_VOTE) {
-            throw new NaoPodeVotarException();
-        }
-
-        associadoService.desabilitarCpf(associado);
-
-        return associado;
-    }
 
     private void validarParametros(VotoDto votoDto) {
         Set<ConstraintViolation<VotoDto>> violations = validator.validate(votoDto);

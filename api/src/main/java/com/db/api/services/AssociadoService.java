@@ -3,14 +3,15 @@ package com.db.api.services;
 import com.db.api.dtos.AssociadoDto;
 import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
+import com.db.api.exceptions.NaoPodeVotarException;
 import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
 import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
@@ -51,9 +52,14 @@ public class AssociadoService {
     }
 
     @Transactional
-    public void desabilitarCpf(Associado associado) {
-        associado.setStatusCPF(StatusCPF.UNABLE_TO_VOTE);
-        associadoRepository.save(associado);
+    public Associado validarAssociado(String cpfAssociado) {
+        Associado associado = buscarAssociadoPorCPF(cpfAssociado);
+
+        if (associado.getStatusCPF() == StatusCPF.UNABLE_TO_VOTE) {
+            throw new NaoPodeVotarException();
+        }
+
+        return associado;
     }
 }
 

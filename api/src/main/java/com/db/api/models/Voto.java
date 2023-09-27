@@ -22,7 +22,7 @@ public class Voto {
     @JoinColumn(name = "sessao_id")
     private Sessao sessao;
     @ManyToOne
-    @JoinColumn(name = "associado_id", unique = true)
+    @JoinColumn(name = "associado_id")
     private Associado associado;
     @Enumerated(EnumType.STRING)
     @Column(name = "voto")

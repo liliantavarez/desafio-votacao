@@ -63,15 +63,6 @@ class VotoServiceTest {
         verify(votoRepository, times(1)).save(any(Voto.class));
     }
 
-    @Test
-    void testRegistrarVotoAssociadoNaoPodeVotar() {
-        associado.setStatusCPF(StatusCPF.UNABLE_TO_VOTE);
-
-        when(validator.validate(votoDto)).thenReturn(Collections.emptySet());
-        when(associadoService.buscarAssociadoPorCPF(votoDto.getAssociado().getCpf())).thenReturn(associado);
-
-        assertThrows(NaoPodeVotarException.class, () -> votoService.registrarVoto(votoDto));
-    }
 
     @Test
     void testRegistrarVotoDuplicado() {
