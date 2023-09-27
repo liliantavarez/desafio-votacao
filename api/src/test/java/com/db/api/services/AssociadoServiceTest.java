@@ -1,7 +1,9 @@
 package com.db.api.services;
 
 import com.db.api.dtos.AssociadoDto;
+import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
+import com.db.api.exceptions.NaoPodeVotarException;
 import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
@@ -16,7 +18,9 @@ import org.mockito.MockitoAnnotations;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -65,4 +69,14 @@ class AssociadoServiceTest {
         assertThrows(AssociadoJaCadastradoException.class, () ->
                 associadoService.registrarAssociado(associadoDto));
     }
+    @Test
+    void testValidarSeAssociadoPodeVotar() {
+        Associado associado = AssociadoStub.gerarAssociadoDtoValida();
+        associado.setStatusCPF(StatusCPF.UNABLE_TO_VOTE);
+
+        when(associadoRepository.findByCpf(associado.getCpf())).thenReturn(Optional.of(associado));
+
+        assertThrows(NaoPodeVotarException.class, () -> associadoService.validarAssociado((associado.getCpf())));
+    }
+
 }
