@@ -27,14 +27,12 @@ class SessaoServiceTest {
     private SessaoRepository sessaoRepository;
 
     @Mock
-    private PautaRepository pautaRepository;
-    @Mock
-    private VotoRepository votoRepository;
+    private PautaService pautaService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        sessaoService = new SessaoService(sessaoRepository, pautaRepository, votoRepository);
+        sessaoService = new SessaoService(sessaoRepository, pautaService);
     }
 
     @Test
@@ -42,7 +40,7 @@ class SessaoServiceTest {
     void testIniciarSessaoVotacaComDadosValidos() {
 
         Pauta pauta = PautaStub.gerarPautaDtoValida();
-        when(pautaRepository.findByTitulo(pauta.getTitulo())).thenReturn(Optional.of(pauta));
+        when(pautaService.buscarPauta(pauta.getTitulo())).thenReturn(pauta);
 
         sessaoService.iniciarSessaoVotacao(pauta.getTitulo(), SessaoStub.gerarSessaoDtoValida().getDataEncerramento());
 

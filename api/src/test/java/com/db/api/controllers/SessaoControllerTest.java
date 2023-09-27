@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 
 import static com.db.api.SqlProvider.inserirPauta;
 import static com.db.api.SqlProvider.resetarDB;
@@ -20,6 +19,7 @@ import static org.hamcrest.Matchers.hasItem;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
 class SessaoControllerTest {
 
     private final String URL = "/api/v1/sessoes";
@@ -33,10 +33,7 @@ class SessaoControllerTest {
 
     @Test
     @DisplayName("Deve iniciar uma sessão de votação com sucesso")
-    @SqlGroup({
-            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirPauta),
-            @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = resetarDB)
-    })
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirPauta)
     void deveIniciarSessaoComSucesso() {
         RestAssured.given()
                 .contentType(ContentType.JSON)

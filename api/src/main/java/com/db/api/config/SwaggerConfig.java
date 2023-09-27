@@ -35,9 +35,4 @@ public class SwaggerConfig {
         return openAPI;
     }
 
-    @Bean
-    public void configureSpringDoc() {
-        SpringDocUtils.getConfig().addHiddenRestControllers(PautaController.class);
-    }
-
 }

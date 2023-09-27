@@ -1,13 +1,16 @@
 package com.db.api.services;
 
 import com.db.api.dtos.AssociadoDto;
+import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.ParametrosInvalidosException;
+import com.db.api.exceptions.RegistroNaoEncontradoException;
 import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
@@ -41,6 +44,16 @@ public class AssociadoService {
 
     private boolean associadoCadastrado(String cpfAssociado) {
         return associadoRepository.existsAssociadoByCpf(cpfAssociado);
+    }
+
+    public Associado buscarAssociadoPorCPF(String cpfAssociado) {
+        return associadoRepository.findByCpf(cpfAssociado).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
+    }
+
+    @Transactional
+    public void desabilitarCpf(Associado associado) {
+        associado.setStatusCPF(StatusCPF.UNABLE_TO_VOTE);
+        associadoRepository.save(associado);
     }
 }
 

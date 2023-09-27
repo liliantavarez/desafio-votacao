@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/pautas")
 public class PautaController {
 
-    private PautaService pautaService;
+    private final PautaService pautaService;
 
     @PostMapping("/cadastrar")
     ResponseEntity<PautaDto> criarPauta(@RequestBody @Valid PautaDto pautaDto, UriComponentsBuilder uriBuilder) {

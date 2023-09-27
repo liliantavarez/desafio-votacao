@@ -2,32 +2,44 @@
   "openapi": "3.0.3",
   "info": {
     "title": "API - Votação de Pautas",
-    "description": "A API de Votação é uma plataforma que permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações. Essa API foi desenvolvida para facilitar a administração de processos de votação em diversos contextos, desde assembleias até decisões internas de uma organização",
+    "description": "A API de Votação é uma plataforma que permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações. Essa API foi desenvolvida para facilitar a administração de processos de votação em diversos contextos, desde assembleias até decisões internas de uma organização.",
     "version": "1.0.0"
   },
   "externalDocs": {
-    "description": "Find out more about Swagger",
+    "description": "Saiba mais sobre Swagger",
     "url": "http://swagger.io"
   },
   "servers": [
     {
-      "url": "http://localhost:8080/api/v1"
+      "url": "http://localhost:8080"
     }
   ],
   "tags": [
     {
       "name": "pautas",
       "description": "Gerenciar pautas da aplicação"
+    },
+    {
+      "name": "associados",
+      "description": "Gerenciar associados da aplicação"
+    },
+    {
+      "name": "votos",
+      "description": "Registrar e consultar votos"
+    },
+    {
+      "name": "sessoes",
+      "description": "Gerenciar sessões de votação"
     }
   ],
   "paths": {
-    "/pautas/cadastrar": {
+    "/api/v1/pautas/cadastrar": {
       "post": {
         "tags": [
           "pautas"
         ],
         "summary": "Cadastrar uma nova pauta",
-        "description": "Endpoint para cadastrar uma nova pauta na aplicação. Recebe um objeto JSON no corpo da requisição com os campos titulo (obrigatório) e descricao (opcional). Retorna 201 se a pauta for cadastrada com sucesso ou 422 se os dados da requisição forem inválidos.",
+        "description": "Endpoint para cadastrar uma nova pauta na aplicação. Recebe um objeto JSON no corpo da requisição com os campos título (obrigatório) e descrição (opcional). Retorna 201 se a pauta for cadastrada com sucesso ou 422 se os dados da requisição forem inválidos.",
         "requestBody": {
           "description": "Cadastrar uma nova pauta na aplicação",
           "content": {
@@ -49,13 +61,11 @@
                 },
                 "examples": {
                   "PautaDto": {
-                    "value": "{\n    \"titulo\": \"titulo teste\",\n    \"descricao\": \"descricao teste\"\n}"
+                    "value": {
+                      "titulo": "Título de pauta que deseja cadastrar",
+                      "descricao": "Descrição da pauta que deseja cadastrar"
+                    }
                   }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PautaDto"
                 }
               }
             }
@@ -66,7 +76,203 @@
               "application/json": {
                 "examples": {
                   "ErrorResponse": {
-                    "value": "{\n    \"mensagem\": \"Erro de validação\",\n    \"detalhes\": [\n        \"Por favor, informe o titulo da pauta.\"\n    ]\n}"
+                    "value": {
+                      "mensagem": "Erro de validação",
+                      "detalhes": [
+                        "Por favor, informe o título da pauta."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/associados/registrar": {
+      "post": {
+        "tags": [
+          "associados"
+        ],
+        "summary": "Registrar um novo associado",
+        "description": "Endpoint para registrar um novo associado na aplicação. Recebe um objeto JSON no corpo da requisição com os campos nome (obrigatório) e cpf (obrigatório e válido). Retorna 201 se o associado for registrado com sucesso ou 422 se os dados da requisição forem inválidos.",
+        "requestBody": {
+          "description": "Registrar um novo associado na aplicação",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssociadoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Associado registrado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssociadoDto"
+                },
+                "examples": {
+                  "AssociadoDto": {
+                    "value": {
+                      "nome": "Nome do associado",
+                      "cpf": "12345678901"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados da requisição inválidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Erro de validação",
+                      "detalhes": [
+                        "Por favor, informe o nome do associado.",
+                        "Por favor, informe um CPF válido."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/votos/registrar": {
+      "post": {
+        "tags": [
+          "votos"
+        ],
+        "summary": "Registrar um novo voto",
+        "description": "Endpoint para registrar um novo voto na aplicação. Recebe um objeto JSON no corpo da requisição com os campos sessao_id (obrigatório), associado (obrigatório) e votoEnum (obrigatório). Retorna 200 se o voto for registrado com sucesso ou 422 se os dados da requisição forem inválidos.",
+        "requestBody": {
+          "description": "Registrar um novo voto na aplicação",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VotoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Voto registrado com sucesso!"
+          },
+          "422": {
+            "description": "Dados da requisição inválidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Erro de validação",
+                      "detalhes": [
+                        "Por favor, informe o identificador da sessão que deseja votar.",
+                        "Por favor, informe um CPF válido."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessoes/iniciarVotacao": {
+      "post": {
+        "tags": [
+          "sessoes"
+        ],
+        "summary": "Iniciar uma nova sessão de votação",
+        "description": "Endpoint para iniciar uma nova sessão de votação na aplicação. Recebe um objeto JSON no corpo da requisição com os campos pauta (obrigatório) e dataEncerramento (opcional). Retorna 201 se a sessão for iniciada com sucesso ou 422 se os dados da requisição forem inválidos.",
+        "requestBody": {
+          "description": "Iniciar uma nova sessão de votação na aplicação",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessaoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Sessão de votação iniciada com sucesso!"
+          },
+          "422": {
+            "description": "Dados da requisição inválidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Erro de validação",
+                      "detalhes": [
+                        "Por favor, informe a pauta para iniciar a sessão."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessoes/{id}/resultado": {
+      "get": {
+        "tags": [
+          "sessoes"
+        ],
+        "summary": "Obter o resultado de uma sessão de votação",
+        "description": "Endpoint para obter o resultado de uma sessão de votação com base no ID da sessão fornecido. Retorna os detalhes da sessão, incluindo a pauta associada, a data de encerramento e o resultado da sessão.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultado da sessão de votação obtido com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessaoResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sessão de votação não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Sessão de votação não encontrada.",
+                      "detalhes": [
+                        "A sessão requerida não foi encontrada!"
+                      ]
+                    }
                   }
                 }
               }
@@ -86,11 +292,133 @@
         "properties": {
           "titulo": {
             "type": "string",
-            "example": "Titulo de pauta que deseja cadastrar"
+            "example": "Título de pauta que deseja cadastrar"
           },
           "descricao": {
             "type": "string",
             "example": "Descrição da pauta que deseja cadastrar"
+          }
+        }
+      },
+      "PautaRequestSessao": {
+        "required": [
+          "titulo"
+        ],
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "example": "Título de pauta que deseja iniciar uma sessão de votação"
+          }
+        }
+      },
+      "AssociadoDto": {
+        "required": [
+          "nome",
+          "cpf"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Nome do associado"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "12345678901"
+          }
+        }
+      },
+      "AssociadoRequestVoto": {
+        "required": [
+          "nome",
+          "cpf"
+        ],
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string",
+            "example": "12345678901"
+          }
+        }
+      },
+      "VotoDto": {
+        "required": [
+          "sessao_id",
+          "associado",
+          "votoEnum"
+        ],
+        "type": "object",
+        "properties": {
+          "sessao_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "associado": {
+            "type": "object",
+            "properties": {
+              "cpf": {
+                "type": "string",
+                "example": "12345678901"
+              }
+            }
+          },
+          "votoEnum": {
+            "type": "string",
+            "enum": [
+              "SIM",
+              "NAO"
+            ],
+            "example": "SIM"
+          }
+        }
+      },
+      "SessaoDto": {
+        "type": "object",
+        "properties": {
+          "pauta": {
+            "$ref": "#/components/schemas/PautaRequestSessao"
+          },
+          "dataEncerramento": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-09-30T12:00:00"
+          }
+        }
+      },
+      "SessaoResponse": {
+        "type": "object",
+        "properties": {
+          "pauta": {
+            "$ref": "#/components/schemas/PautaDto"
+          },
+          "dataEncerramento": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-09-30T12:00:00"
+          },
+          "resultadoSessao": {
+            "type": "string",
+            "enum": [
+              "APROVADA",
+              "REPROVADA",
+              "INDEFINIDA"
+            ],
+            "example": "APROVADA"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "detalhes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
