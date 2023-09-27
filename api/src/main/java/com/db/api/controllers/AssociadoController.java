@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/associados")
 public class AssociadoController {
 
-    private AssociadoService associadoService;
+    private final AssociadoService associadoService;
 
     @PostMapping("/registrar")
     ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoDto associadoDto, UriComponentsBuilder uriBuilder) {
