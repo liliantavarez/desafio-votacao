@@ -12,6 +12,7 @@ public interface PautaStub {
 
     static Pauta gerarPautaRequestDto() {
         return Pauta.builder()
+                .id(1L)
                 .titulo("Novas funcionalidades")
                 .build();
     }
