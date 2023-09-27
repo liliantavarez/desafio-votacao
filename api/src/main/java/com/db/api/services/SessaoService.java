@@ -1,39 +1,38 @@
 package com.db.api.services;
 
-import com.db.api.dtos.response.SessaoResponse;
-import com.db.api.enums.ResultadoSessao;
-import com.db.api.enums.VotoEnum;
+import com.db.api.enums.StatusSessao;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
+import com.db.api.exceptions.SessaoEncerradaException;
 import com.db.api.models.Pauta;
 import com.db.api.models.Sessao;
-import com.db.api.repositories.PautaRepository;
 import com.db.api.repositories.SessaoRepository;
-import com.db.api.repositories.VotoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class SessaoService {
 
     private final SessaoRepository sessaoRepository;
-    private final PautaRepository pautaRepository;
-    private final VotoRepository votoRepository;
+    private final PautaService pautaService;
 
     @Transactional
     public Sessao iniciarSessaoVotacao(String pautaTitulo, LocalDateTime dataEncerramento) {
         Pauta pauta = buscarPauta(pautaTitulo);
         Sessao sessao = criarSessao(pauta, dataEncerramento);
 
+        if (pauta == null) {
+            throw new RegistroNaoEncontradoException("Pauta não encontrada.");
+        }
+
         return sessaoRepository.save(sessao);
     }
 
     private Pauta buscarPauta(String pautaTitulo) {
-        return pautaRepository.findByTitulo(pautaTitulo).orElseThrow(() -> new RegistroNaoEncontradoException("A pauta requerida não foi encontrado!"));
+        return pautaService.buscarPauta(pautaTitulo);
     }
 
     private Sessao criarSessao(Pauta pauta, LocalDateTime dataEncerramento) {
@@ -46,5 +45,26 @@ public class SessaoService {
         return sessao;
     }
 
+    @Transactional
+    public Sessao validarSessao(long sessaoId) {
+        Sessao sessao = sessaoRepository.findById(sessaoId)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Sessão não encontrada."));
+
+        if (sessao.getDataEncerramento().isBefore(LocalDateTime.now()) && sessao.getStatusSessao() == StatusSessao.ABERTA) {
+            encerrarSessao(sessao);
+        }
+
+        if (sessao.getStatusSessao() == StatusSessao.ENCERRADA) {
+            throw new SessaoEncerradaException();
+        }
+
+        return sessao;
+    }
+
+    @Transactional
+    public void encerrarSessao(Sessao sessao) {
+        sessao.setStatusSessao(StatusSessao.ENCERRADA);
+        sessaoRepository.save(sessao);
+    }
 }
 
