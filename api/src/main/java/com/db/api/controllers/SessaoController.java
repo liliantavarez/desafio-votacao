@@ -28,5 +28,8 @@ public class SessaoController {
 
         return ResponseEntity.created(uri).body("Iniciada votação da pauta: " + sessaoDto.getPauta().getTitulo());
     }
-
+    @GetMapping("/{id}/resultado")
+    public ResponseEntity<SessaoResponse> obterResultadoSessao(@PathVariable Long id) {
+        return ResponseEntity.ok().body(sessaoService.contabilizarVotos(id));
+    }
 }

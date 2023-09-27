@@ -1,18 +1,25 @@
 package com.db.api.controllers;
 
+import com.db.api.repositories.SessaoRepository;
+import com.db.api.repositories.VotoRepository;
+import com.db.api.services.SessaoService;
 import com.db.api.stubs.SessaoStub;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 
-import static com.db.api.SqlProvider.inserirPauta;
-import static com.db.api.SqlProvider.resetarDB;
+import static com.db.api.SqlProvider.*;
+import static com.db.api.SqlProvider.inserirAssociado;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -26,8 +33,17 @@ class SessaoControllerTest {
     @LocalServerPort
     private int port;
 
+    @Mock
+    private SessaoRepository sessaoRepository;
+    @Mock
+    private VotoRepository votoRepository;
+
+    @InjectMocks
+    private SessaoService sessaoService;
+
     @BeforeEach
     void setup() {
+        MockitoAnnotations.openMocks(this);
         RestAssured.port = this.port;
     }
 
@@ -72,5 +88,39 @@ class SessaoControllerTest {
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .body("mensagem", equalTo("Registro não encontrado"))
                 .body("detalhes", hasItem("A pauta requerida não foi encontrado!"));
+    }
+
+    @Test
+    @DisplayName("Deve obter resultado de sessao com votos favoráveis")
+    @SqlGroup({
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB),
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirVoto),
+    })
+    void testObterResultadoSessaoAprovada() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}/resultado", 1)
+                .then().log().all()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value())
+                .body("resultadoSessao", equalTo("APROVADA"));
+    }
+
+    @Test
+    @DisplayName("Deve obter resultado de sessao com votos contrários")
+    @SqlGroup({
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB),
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirVoto),
+    })
+    void testObterResultadoSessaoReprovada() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}/resultado", 2)
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value())
+                .body("resultadoSessao", equalTo("REPROVADA"));
     }
 }
