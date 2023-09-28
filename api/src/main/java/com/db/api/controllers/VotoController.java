@@ -18,12 +18,12 @@ public class VotoController {
 
     private final VotoService votoService;
 
-    @PostMapping("/registrar")
+    @PostMapping("/salvar")
     ResponseEntity<String> registrarVoto(@RequestBody @Valid VotoDto votoDto) {
         votoService.registrarVoto(votoDto);
 
 
-        return ResponseEntity.ok().body("Voto registrado com sucesso!");
+        return ResponseEntity.ok().body("Voto salvo com sucesso!");
     }
 
 }

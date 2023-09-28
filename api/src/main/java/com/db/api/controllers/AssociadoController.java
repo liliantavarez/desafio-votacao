@@ -23,7 +23,7 @@ public class AssociadoController {
 
     private final AssociadoService associadoService;
 
-    @PostMapping("/registrar")
+    @PostMapping("/cadastrar")
     ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoDto associadoDto, UriComponentsBuilder uriBuilder) {
         associadoService.registrarAssociado(associadoDto);
         Associado associado = new Associado(associadoDto.getNome(),associadoDto.getNome());
