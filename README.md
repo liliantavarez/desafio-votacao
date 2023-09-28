@@ -1,3 +1,103 @@
+# API - Votação
+
+> A API de Votação permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações.
+
+## 💻 Pré-requisitos
+
+- **Java 11 ou Superior**: É necessário ter o Java 11 ou uma versão mais recente instalada na sua máquina. Você pode verificar a versão do Java instalada usando o comando `java -version` no seu terminal.
+
+## 🚀 Instalando desafio-votacao
+
+Para instalar o desafio-votacao, siga estas etapas:
+
+**Windows:**
+
+1. Abra seu terminal ou Prompt de Comando.
+
+2. Execute o seguinte comando para clonar o repositório:
+
+   ```
+   git clone https://github.com/liliantavarez/desafio-votacao.git
+   ```
+
+   Isso fará o download do projeto para o seu computador.
+
+3. Abra o projeto em seu IDE de preferência e o execute ou abra o terminal da sua IDE e executar o comando:
+
+   ```
+   ./gradlew bootRun
+   ```
+O projeto será iniciado localmente.
+4. Executando os testes:
+
+   ```
+   ./gradlew test
+   ```
+
+O serviço fica disponivel em: 
+### [Swagger](http://localhost:8080/swagger-ui/index.html)
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+## Documentação da API
+
+#### Cadastra uma pauta
+
+```http
+  POST /api/v1/pautas/cadastrar
+```
+
+| Parâmetro   | Tipo     | Descrição                                              |
+| :---------- | :------- | :----------------------------------------------------- |
+| `titulo`    | `string` | **Obrigatório**. O titulo da pauta que deseja cadastar |
+| `descricao` | `string` | A descrição da pauta qeu deseja cadastar               |
+
+#### Cadastra um associado
+
+```http
+  POST /api/v1/associados/cadastrar
+```
+
+| Parâmetro | Tipo     | Descrição                                                 |
+| :-------- | :------- | :-------------------------------------------------------- |
+| `nome`    | `string` | **Obrigatório**. O nome do associado que deseja cadastrar |
+| `cpf`     | `string` | **Obrigatório**. O cpf do associado que deseja cadastrar  |
+
+#### Salva voto de determinado associado em determinado sessão
+
+```http
+  POST /api/v1/votos/salvar
+```
+
+| Parâmetro   | Tipo     | Descrição                                        |
+| :---------- | :------- | :----------------------------------------------- |
+| `sessao_id` | `string` | **Obrigatório**. O id da sessão que deseja votar |
+| `votoEnum`  | `string` | Recebe os valores **SIM** ou **NAO**             |
+
+#### Inicia uma sessão de votação
+
+```http
+  POST /api/v1/sessoes/iniciarVotacao
+```
+
+| Parâmetro          | Tipo     | Descrição                                                                      |
+| :----------------- | :------- | :----------------------------------------------------------------------------- |
+| `titulo`           | `string` | **Obrigatório**. O titulo da pauta que deseja inicilizar uma sessão de votação |
+| `dataEncerramento` | `string` | A data de encerramento da sessão de votação                                    |
+
+#### Retorna o resultado de um votação
+
+```http
+  GET /api/v1/sessoes/${id}/resultado
+```
+
+| Parâmetro | Tipo     | Descrição                                   |
+| :-------- | :------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer |
+
+
 # Votação
 
 ## Objetivo
