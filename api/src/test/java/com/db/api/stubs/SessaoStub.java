@@ -18,7 +18,6 @@ public interface SessaoStub {
         return Sessao.builder()
                 .id(1L)
                 .pauta(PautaStub.gerarPautaRequestDto())
-                .dataAbertura(LocalDateTime.now())
                 .dataEncerramento(LocalDateTime.now().plusMinutes(60))
                 .statusSessao(StatusSessao.ABERTA)
                 .build();
@@ -27,7 +26,6 @@ public interface SessaoStub {
         return Sessao.builder()
                 .id(2L)
                 .pauta(PautaStub.gerarPautaRequestDto())
-                .dataAbertura(LocalDateTime.now())
                 .dataEncerramento(LocalDateTime.now())
                 .statusSessao(StatusSessao.ENCERRADA)
                 .build();
