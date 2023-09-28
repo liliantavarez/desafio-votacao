@@ -42,11 +42,11 @@ class VotoControllerTest {
                 .contentType(ContentType.JSON)
                 .body(VotoStub.gerarVotoDtoValida())
                 .when()
-                .post(URL + "/registrar")
+                .post(URL + "/salvar")
                 .then()
                 .contentType(ContentType.TEXT)
                 .statusCode(HttpStatus.OK.value())
-                .body(equalTo("Voto registrado com sucesso!"));
+                .body(equalTo("Voto salvo com sucesso!"));
     }
     @Test
     @DisplayName("Deve retornar um exceção ao tentar registrar voto em uma sessão inexistente")
@@ -56,7 +56,7 @@ class VotoControllerTest {
                 .contentType(ContentType.JSON)
                 .body(VotoStub.gerarVotoSessaoInvalida())
                 .when()
-                .post(URL + "/registrar")
+                .post(URL + "/salvar")
                 .then()
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.NOT_FOUND.value())
@@ -70,7 +70,7 @@ class VotoControllerTest {
                 .contentType(ContentType.JSON)
                 .body(VotoStub.gerarVotoAssociadoInvalida())
                 .when()
-                .post(URL + "/registrar")
+                .post(URL + "/salvar")
                 .then()
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.NOT_FOUND.value())
@@ -85,8 +85,8 @@ class VotoControllerTest {
                 .contentType(ContentType.JSON)
                 .body(VotoStub.gerarVotoSessaoEncerrada())
                 .when()
-                .post(URL + "/registrar")
-                .then().log().all()
+                .post(URL + "/salvar")
+                .then()
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("mensagem", equalTo("Sessão encerrada"))
