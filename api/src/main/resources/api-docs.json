@@ -90,7 +90,7 @@
         }
       }
     },
-    "/api/v1/associados/registrar": {
+    "/api/v1/associados/cadastrar": {
       "post": {
         "tags": [
           "associados"
@@ -148,13 +148,13 @@
         }
       }
     },
-    "/api/v1/votos/registrar": {
+    "/api/v1/votos/salvar": {
       "post": {
         "tags": [
           "votos"
         ],
-        "summary": "Registrar um novo voto",
-        "description": "Endpoint para registrar um novo voto na aplicação. Recebe um objeto JSON no corpo da requisição com os campos sessao_id (obrigatório), associado (obrigatório) e votoEnum (obrigatório). Retorna 200 se o voto for registrado com sucesso ou 422 se os dados da requisição forem inválidos.",
+        "summary": "Salvar voto do associado",
+        "description": "Endpoint para salvar um novo voto na aplicação. Recebe um objeto JSON no corpo da requisição com os campos sessao_id (obrigatório), associado (obrigatório) e votoEnum (obrigatório). Retorna 200 se o voto for registrado com sucesso ou 422 se os dados da requisição forem inválidos.",
         "requestBody": {
           "description": "Registrar um novo voto na aplicação",
           "content": {
@@ -168,7 +168,7 @@
         },
         "responses": {
           "200": {
-            "description": "Voto registrado com sucesso!"
+            "description": "Voto salvo com sucesso!"
           },
           "422": {
             "description": "Dados da requisição inválidos",
