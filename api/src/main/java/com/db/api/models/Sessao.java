@@ -24,17 +24,20 @@ public class Sessao {
     @ManyToOne
     private Pauta pauta;
     @Column(name = "data_abertura")
-    private final LocalDateTime dataAbertura = LocalDateTime.now();
+    private LocalDateTime dataAbertura;
     @Column(name = "data_encerramento")
-    private LocalDateTime dataEncerramento = dataAbertura.plusMinutes(1);
+    private LocalDateTime dataEncerramento;
     @Enumerated(EnumType.STRING)
-    private StatusSessao statusSessao = StatusSessao.ABERTA;
+    private StatusSessao statusSessao;
     @Enumerated(EnumType.STRING)
     private ResultadoSessao resultadoSessao;
 
 
     public Sessao(Pauta pauta) {
         this.pauta = pauta;
+        this.dataAbertura = LocalDateTime.now();
+        this.dataEncerramento = this.dataAbertura.plusMinutes(1);
+        this.statusSessao = StatusSessao.ABERTA;
     }
 
     public void setDataEncerramento(LocalDateTime dataEncerramento) {
