@@ -24,7 +24,7 @@ public class Sessao {
     @ManyToOne
     private Pauta pauta;
     @Column(name = "data_abertura")
-    private LocalDateTime dataAbertura = LocalDateTime.now();
+    private final LocalDateTime dataAbertura = LocalDateTime.now();
     @Column(name = "data_encerramento")
     private LocalDateTime dataEncerramento = dataAbertura.plusMinutes(1);
     @Enumerated(EnumType.STRING)
