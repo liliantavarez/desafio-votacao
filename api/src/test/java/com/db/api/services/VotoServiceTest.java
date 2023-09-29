@@ -1,8 +1,6 @@
 package com.db.api.services;
 
 import com.db.api.dtos.VotoDto;
-import com.db.api.enums.StatusCPF;
-import com.db.api.exceptions.NaoPodeVotarException;
 import com.db.api.exceptions.VotoDuplicadoException;
 import com.db.api.models.Associado;
 import com.db.api.models.Sessao;
@@ -16,9 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import javax.validation.Validator;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,9 +30,6 @@ class VotoServiceTest {
     @Mock
     private SessaoService sessaoService;
 
-    @Mock
-    private Validator validator;
-
     @InjectMocks
     private VotoService votoService;
 
@@ -53,7 +45,6 @@ class VotoServiceTest {
     @Test
     void testRegistrarVoto() {
 
-        when(validator.validate(votoDto)).thenReturn(Collections.emptySet());
         when(sessaoService.validarSessao(votoDto.getSessao_id())).thenReturn(sessao);
         when(associadoService.buscarAssociadoPorCPF(votoDto.getAssociado().getCpf())).thenReturn(associado);
         when(votoRepository.existsVotoBySessaoIdAndAssociadoCpf(votoDto.getSessao_id(), votoDto.getAssociado().getCpf())).thenReturn(false);
@@ -66,7 +57,6 @@ class VotoServiceTest {
 
     @Test
     void testRegistrarVotoDuplicado() {
-        when(validator.validate(votoDto)).thenReturn(Collections.emptySet());
         when(votoRepository.existsVotoBySessaoIdAndAssociadoCpf(votoDto.getSessao_id(), votoDto.getAssociado().getCpf())).thenReturn(true);
 
         assertThrows(VotoDuplicadoException.class, () -> votoService.registrarVoto(votoDto));

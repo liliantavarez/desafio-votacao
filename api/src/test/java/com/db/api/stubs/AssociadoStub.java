@@ -1,7 +1,6 @@
 package com.db.api.stubs;
 
 import com.db.api.dtos.request.AssociadoRequestVoto;
-import com.db.api.enums.StatusCPF;
 import com.db.api.models.Associado;
 
 public interface AssociadoStub {
@@ -24,6 +23,7 @@ public interface AssociadoStub {
                 .cpf("51931799830")
                 .build();
     }
+
     static Associado gerarAssociadoDtoCpfInvalida() {
         return Associado.builder()
                 .nome("Mario Souza")

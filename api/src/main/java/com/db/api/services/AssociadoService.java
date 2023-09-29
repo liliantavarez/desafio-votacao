@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validator;
 import java.util.Set;
 
@@ -21,10 +22,8 @@ import java.util.Set;
 public class AssociadoService {
 
     private final AssociadoRepository associadoRepository;
-    private final Validator validator;
 
-
-    public void registrarAssociado(AssociadoDto associadoDto) {
+    public void registrarAssociado(@Valid AssociadoDto associadoDto) {
         validarParametros(associadoDto);
 
         Associado associado = new Associado(associadoDto.getNome(), associadoDto.getCpf());
@@ -32,12 +31,6 @@ public class AssociadoService {
     }
 
     private void validarParametros(AssociadoDto associadoDto) {
-        Set<ConstraintViolation<AssociadoDto>> violations = validator.validate(associadoDto);
-
-        if (!violations.isEmpty()) {
-            throw new ParametrosInvalidosException("Por favor, verifique os dados do associado!");
-        }
-
         if (associadoCadastrado(associadoDto.getCpf())) {
             throw new AssociadoJaCadastradoException();
         }
@@ -55,7 +48,7 @@ public class AssociadoService {
     public Associado validarAssociado(String cpfAssociado) {
         Associado associado = buscarAssociadoPorCPF(cpfAssociado);
 
-        if (associado.getStatusCPF() == StatusCPF.UNABLE_TO_VOTE) {
+        if (associado.getStatusCPF() == StatusCPF.NAO_PODE_VOTAR) {
             throw new NaoPodeVotarException();
         }
 

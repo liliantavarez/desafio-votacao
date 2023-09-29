@@ -11,6 +11,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssociadoRequestVoto {
     private String cpf;
-
 }
-
