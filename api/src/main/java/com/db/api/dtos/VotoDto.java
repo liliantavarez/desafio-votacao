@@ -2,7 +2,6 @@ package com.db.api.dtos;
 
 import com.db.api.dtos.request.AssociadoRequestVoto;
 import com.db.api.enums.VotoEnum;
-import com.db.api.models.Voto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +22,4 @@ public class VotoDto {
     private AssociadoRequestVoto associado;
     @Enumerated(EnumType.STRING)
     private VotoEnum votoEnum;
-
-
 }

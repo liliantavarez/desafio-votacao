@@ -1,11 +1,8 @@
 package com.db.api.controllers;
 
 import com.db.api.dtos.AssociadoDto;
-import com.db.api.dtos.PautaDto;
 import com.db.api.models.Associado;
-import com.db.api.models.Pauta;
 import com.db.api.services.AssociadoService;
-import com.db.api.services.PautaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +23,7 @@ public class AssociadoController {
     @PostMapping("/cadastrar")
     ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoDto associadoDto, UriComponentsBuilder uriBuilder) {
         associadoService.registrarAssociado(associadoDto);
-        Associado associado = new Associado(associadoDto.getNome(),associadoDto.getNome());
+        Associado associado = new Associado(associadoDto.getNome(), associadoDto.getNome());
 
         var uri = uriBuilder.path("/associados/{id}").buildAndExpand(associado.getId()).toUri();
 
