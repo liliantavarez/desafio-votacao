@@ -1,16 +1,11 @@
 package com.db.api.controllers;
 
-import com.db.api.repositories.SessaoRepository;
-import com.db.api.repositories.VotoRepository;
-import com.db.api.services.SessaoService;
 import com.db.api.stubs.SessaoStub;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -19,7 +14,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
 import static com.db.api.SqlProvider.*;
-import static com.db.api.SqlProvider.inserirAssociado;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -33,17 +27,8 @@ class SessaoControllerTest {
     @LocalServerPort
     private int port;
 
-    @Mock
-    private SessaoRepository sessaoRepository;
-    @Mock
-    private VotoRepository votoRepository;
-
-    @InjectMocks
-    private SessaoService sessaoService;
-
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
         RestAssured.port = this.port;
     }
 
