@@ -15,7 +15,6 @@ public class AssociadoDto {
     @NotBlank(message = "Por favor informe o nome do associado!")
     @Size(min = 3, max = 150)
     private String nome;
-    @NotBlank(message = "Por favor informe o cpf do associado!")
     @CPF
     private String cpf;
 }
