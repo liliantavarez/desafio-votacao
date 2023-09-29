@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,20 +75,16 @@ class SessaoServiceTest {
     void testObterResultadoSessaoAprovada() {
         when(sessaoRepository.findById(sessaoTeste.getId())).thenReturn(Optional.of(sessaoTeste));
 
-        List<Object[]> resultadosVotos = new ArrayList<>();
-        resultadosVotos.add(new Object[]{VotoEnum.SIM, 5L});
-        resultadosVotos.add(new Object[]{VotoEnum.NAO, 2L});
+        List<VotoEnum> votos = new ArrayList<>();
+        votos.add(VotoEnum.SIM);
+        votos.add(VotoEnum.NAO);
+        votos.add(VotoEnum.SIM);
+        when(sessaoRepository.buscarVotosDaSessao(sessaoTeste.getId())).thenReturn(votos);
 
-        TypedQuery<Object[]> queryMock = mock(TypedQuery.class);
-        when(entityManager.createQuery(anyString(), eq(Object[].class))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("sessaoId"), eq(sessaoTeste.getId()))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.SIM))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.NAO))).thenReturn(queryMock);
-        when(queryMock.getResultList()).thenReturn(resultadosVotos);
+        SessaoResponse result = sessaoService.contabilizarVotos(sessaoTeste.getId());
 
-        SessaoResponse sessaoResponse = sessaoService.contabilizarVotos(sessaoTeste.getId());
-
-        assertEquals(ResultadoSessao.APROVADA, sessaoResponse.getResultadoSessao());
+        assertEquals(ResultadoSessao.APROVADA, result.getResultadoSessao());
+        verify(sessaoRepository, times(1)).buscarVotosDaSessao(sessaoTeste.getId());
     }
 
     @Test
@@ -97,20 +92,16 @@ class SessaoServiceTest {
     void testObterResultadoSessaoReprovada() {
         when(sessaoRepository.findById(sessaoTeste.getId())).thenReturn(Optional.of(sessaoTeste));
 
-        List<Object[]> resultadosVotos = new ArrayList<>();
-        resultadosVotos.add(new Object[]{VotoEnum.SIM, 2L});
-        resultadosVotos.add(new Object[]{VotoEnum.NAO, 5L});
+        List<VotoEnum> votos = new ArrayList<>();
+        votos.add(VotoEnum.NAO);
+        votos.add(VotoEnum.SIM);
+        votos.add(VotoEnum.NAO);
+        when(sessaoRepository.buscarVotosDaSessao(sessaoTeste.getId())).thenReturn(votos);
 
-        TypedQuery<Object[]> queryMock = mock(TypedQuery.class);
-        when(entityManager.createQuery(anyString(), eq(Object[].class))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("sessaoId"), eq(sessaoTeste.getId()))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.SIM))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.NAO))).thenReturn(queryMock);
-        when(queryMock.getResultList()).thenReturn(resultadosVotos);
+        SessaoResponse result = sessaoService.contabilizarVotos(sessaoTeste.getId());
 
-        SessaoResponse sessaoResponse = sessaoService.contabilizarVotos(sessaoTeste.getId());
-
-        assertEquals(ResultadoSessao.REPROVADA, sessaoResponse.getResultadoSessao());
+        assertEquals(ResultadoSessao.REPROVADA, result.getResultadoSessao());
+        verify(sessaoRepository, times(1)).buscarVotosDaSessao(sessaoTeste.getId());
     }
 
     @Test
@@ -118,20 +109,15 @@ class SessaoServiceTest {
     void testObterResultadoSessaoIndefinida() {
         when(sessaoRepository.findById(sessaoTeste.getId())).thenReturn(Optional.of(sessaoTeste));
 
-        List<Object[]> resultadosVotos = new ArrayList<>();
-        resultadosVotos.add(new Object[]{VotoEnum.SIM, 2L});
-        resultadosVotos.add(new Object[]{VotoEnum.NAO, 2L});
+        List<VotoEnum> votos = new ArrayList<>();
+        votos.add(VotoEnum.SIM);
+        votos.add(VotoEnum.NAO);
+        when(sessaoRepository.buscarVotosDaSessao(sessaoTeste.getId())).thenReturn(votos);
 
-        TypedQuery<Object[]> queryMock = mock(TypedQuery.class);
-        when(entityManager.createQuery(anyString(), eq(Object[].class))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("sessaoId"), eq(sessaoTeste.getId()))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.SIM))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("votoEnum"), eq(VotoEnum.NAO))).thenReturn(queryMock);
-        when(queryMock.getResultList()).thenReturn(resultadosVotos);
+        SessaoResponse result = sessaoService.contabilizarVotos(sessaoTeste.getId());
 
-        SessaoResponse sessaoResponse = sessaoService.contabilizarVotos(sessaoTeste.getId());
-
-        assertEquals(ResultadoSessao.INDEFINIDA, sessaoResponse.getResultadoSessao());
+        assertEquals(ResultadoSessao.INDEFINIDA, result.getResultadoSessao());
+        verify(sessaoRepository, times(1)).buscarVotosDaSessao(sessaoTeste.getId());
     }
 
     @Test
