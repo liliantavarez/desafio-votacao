@@ -26,7 +26,7 @@ public class Associado {
     @Enumerated(EnumType.STRING)
     @Column(name = "status_cpf")
     @Builder.Default
-    private StatusCPF statusCPF = StatusCPF.ABLE_TO_VOTE;
+    private StatusCPF statusCPF = StatusCPF.PODE_VOTAR;
 
     public Associado(String nome, String cpf) {
         this.nome = nome;
