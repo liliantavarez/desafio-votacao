@@ -4,7 +4,6 @@ import com.db.api.dtos.AssociadoDto;
 import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.NaoPodeVotarException;
-import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
 import com.db.api.stubs.AssociadoStub;
@@ -16,12 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,9 +28,6 @@ class AssociadoServiceTest {
     @Mock
     private AssociadoRepository associadoRepository;
 
-    @Mock
-    private Validator validator;
-
     @InjectMocks
     private AssociadoService associadoService;
 
@@ -48,8 +39,6 @@ class AssociadoServiceTest {
     @Test
     @DisplayName("Ao criar um novo associado com valores válidos, o método save do repositório deve ser chamado")
     void registrarAssociado_ComValoresValidos() {
-        when(validator.validate(any())).thenReturn(new HashSet<>());
-
         AssociadoDto associadoDto = new AssociadoDto(AssociadoStub.gerarAssociadoDtoValida().getNome(), AssociadoStub.gerarAssociadoDtoValida().getCpf());
 
         associadoService.registrarAssociado(associadoDto);
@@ -60,8 +49,6 @@ class AssociadoServiceTest {
     @Test
     @DisplayName("Ao tentar cadastrar um associado com CPF já cadastrado, deve retornar exceção de associado já cadastrado")
     void registrarAssociado_ComCpfJaCadastrado() {
-        when(validator.validate(any())).thenReturn(new HashSet<>());
-
         AssociadoDto associadoDto = new AssociadoDto(AssociadoStub.gerarAssociadoDtoValida().getNome(), AssociadoStub.gerarAssociadoDtoValida().getCpf());
 
         when(associadoRepository.existsAssociadoByCpf(associadoDto.getCpf())).thenReturn(true);
@@ -69,10 +56,11 @@ class AssociadoServiceTest {
         assertThrows(AssociadoJaCadastradoException.class, () ->
                 associadoService.registrarAssociado(associadoDto));
     }
+
     @Test
     void testValidarSeAssociadoPodeVotar() {
         Associado associado = AssociadoStub.gerarAssociadoDtoValida();
-        associado.setStatusCPF(StatusCPF.UNABLE_TO_VOTE);
+        associado.setStatusCPF(StatusCPF.NAO_PODE_VOTAR);
 
         when(associadoRepository.findByCpf(associado.getCpf())).thenReturn(Optional.of(associado));
 

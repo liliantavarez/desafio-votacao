@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SessaoService {
     EntityManager entityManager;
 
     @Transactional
-    public Sessao iniciarSessaoVotacao(String pautaTitulo, LocalDateTime dataEncerramento) {
+    public Sessao iniciarSessaoVotacao(@Valid String pautaTitulo, @Valid LocalDateTime dataEncerramento) {
         Pauta pauta = buscarPauta(pautaTitulo);
         Sessao sessao = criarSessao(pauta, dataEncerramento);
 
