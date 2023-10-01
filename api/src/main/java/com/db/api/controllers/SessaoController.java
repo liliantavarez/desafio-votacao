@@ -1,8 +1,6 @@
 package com.db.api.controllers;
 
-import com.db.api.dtos.PautaDto;
 import com.db.api.dtos.SessaoDto;
-import com.db.api.dtos.request.PautaRequestSessao;
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.models.Sessao;
 import com.db.api.services.SessaoService;

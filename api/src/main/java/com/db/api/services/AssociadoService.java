@@ -4,7 +4,6 @@ import com.db.api.dtos.AssociadoDto;
 import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.NaoPodeVotarException;
-import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
 import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
@@ -12,11 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.Validator;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
