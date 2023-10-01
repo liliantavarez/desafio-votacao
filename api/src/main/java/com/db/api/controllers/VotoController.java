@@ -1,13 +1,12 @@
 package com.db.api.controllers;
 
 import com.db.api.dtos.VotoDto;
+import com.db.api.dtos.request.AssociadoRequestVoto;
+import com.db.api.models.Voto;
 import com.db.api.services.VotoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,4 +25,11 @@ public class VotoController {
         return ResponseEntity.ok().body("Voto salvo com sucesso!");
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<VotoDto> buscarAssociadoPorID(@PathVariable Long id) {
+        Voto voto = votoService.buscarVotoPorID(id);
+        AssociadoRequestVoto associadoRequestVoto = new AssociadoRequestVoto(voto.getAssociado().getCpf());
+
+        return ResponseEntity.ok(new VotoDto(voto.getSessao().getId(), associadoRequestVoto, voto.getVotoEnum()));
+    }
 }

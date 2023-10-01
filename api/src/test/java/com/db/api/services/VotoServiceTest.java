@@ -1,6 +1,7 @@
 package com.db.api.services;
 
 import com.db.api.dtos.VotoDto;
+import com.db.api.exceptions.RegistroNaoEncontradoException;
 import com.db.api.exceptions.VotoDuplicadoException;
 import com.db.api.models.Associado;
 import com.db.api.models.Sessao;
@@ -10,13 +11,15 @@ import com.db.api.stubs.AssociadoStub;
 import com.db.api.stubs.SessaoStub;
 import com.db.api.stubs.VotoStub;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class VotoServiceTest {
@@ -61,5 +64,22 @@ class VotoServiceTest {
 
         assertThrows(VotoDuplicadoException.class, () -> votoService.registrarVoto(votoDto));
     }
+    @Test
+    @DisplayName("Deve buscar um voto com determinado id com sucesso")
+    void testObterVotoPorID() {
+        Voto voto = VotoStub.gerarVotoValido();
+        when(votoRepository.findById(voto.getId())).thenReturn(Optional.of(voto));
 
+        Voto votoEncontrada = votoService.buscarVotoPorID(voto.getId());
+
+        assertEquals(voto, votoEncontrada);
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma exceção ao buscar um voto por id inexistente ")
+    void testObterVotoPorIDInexistente() {
+        when(votoRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RegistroNaoEncontradoException.class, () -> votoService.buscarVotoPorID(1L));
+    }
 }

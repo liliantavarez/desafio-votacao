@@ -27,7 +27,8 @@ Para instalar o desafio-votacao, siga estas etapas:
    ```
    ./gradlew bootRun
    ```
-O projeto será iniciado localmente.
+   O projeto será iniciado localmente.
+
 4. Executando os testes:
 
    ```
