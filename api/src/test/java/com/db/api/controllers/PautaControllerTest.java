@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import static com.db.api.SqlProvider.resetarDB;
+import static com.db.api.SqlProvider.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -56,5 +57,33 @@ class PautaControllerTest {
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .body("mensagem", equalTo("Erro de validação"))
                 .body("detalhes", hasItem("Por favor, informe o titulo da pauta."));
+    }
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirPauta)
+    @DisplayName("Deve buscar uma pauta pelo seu id com sucesso")
+    void testBuscarPautaPorID() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 1L)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body("titulo", equalTo("Novas funcionalidades"));
+    }
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @DisplayName("Deve retornar uma exceção ao tentar buscar um pauta por um id inexistente no banco")
+    void testBuscarPautaPorIDInexistente() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 1L)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .contentType(ContentType.JSON)
+                .body("mensagem", equalTo("Registro não encontrado"))
+                .body("detalhes", hasItem("A pauta requerida não foi encontrado!"));
     }
 }
