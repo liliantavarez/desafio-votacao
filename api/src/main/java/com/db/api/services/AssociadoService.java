@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -53,6 +54,10 @@ public class AssociadoService {
         }
 
         return associado;
+    }
+
+    public Associado buscarAssociadoPorID(Long id){
+        return associadoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
     }
 }
 

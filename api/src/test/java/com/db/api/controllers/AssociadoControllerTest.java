@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
 import static com.db.api.SqlProvider.inserirAssociado;
@@ -57,6 +58,7 @@ class AssociadoControllerTest {
                 .body("mensagem", equalTo("Erro de validação"))
                 .body("detalhes", hasItem("número do registro de contribuinte individual brasileiro (CPF) inválido"));
     }
+
     @Test
     @DisplayName("Deve retornar um exceção ao tentar registrar associado sem informar seu nome")
     void testRegistrarAssociadoNomeVazio() {
@@ -71,6 +73,7 @@ class AssociadoControllerTest {
                 .body("detalhes", hasItem("Por favor informe o nome do associado!"))
                 .body("detalhes", hasItem("tamanho deve ser entre 3 e 150"));
     }
+
     @Test
     @DisplayName("Deve retornar um exceção ao tentar registrar associado com cpf já cadastrado no sistema")
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
@@ -85,5 +88,35 @@ class AssociadoControllerTest {
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("mensagem", equalTo("CPF já cadastrado"))
                 .body("detalhes", hasItem("O associado com esse cpf já está registrado no sistema!"));
+    }
+
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirAssociado)
+    @DisplayName("Deve buscar um associado pelo seu id com sucesso")
+    void testBuscarAssociadoPorID() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 1L)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Carla Silva"))
+                .body("cpf", equalTo("44271476072"));
+    }
+
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @DisplayName("Deve retornar uma exceção ao tentar buscar um associado por um id inexistente no banco")
+    void testBuscarAssociadoPorIDInexistente() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 1L)
+                .then().log().all()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .contentType(MediaType.APPLICATION_JSON_VALUE).log().all()
+                .body("mensagem", equalTo("Registro não encontrado"))
+                .body("detalhes", hasItem("Associado não encontrada."));
     }
 }
