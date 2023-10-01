@@ -13,12 +13,12 @@ VALUES (1, '2023-09-26 13:43:00', '2030-09-26 15:43:03',  'ABERTA', 1);
 INSERT INTO sessoes (id, data_abertura, data_encerramento, status_sessao, pauta_id)
 VALUES (2, '2023-09-26 13:43:00', '2030-06-26 15:43:03','ABERTA', 2);
 
-INSERT INTO votos (voto, associado_id, sessao_id)
-VALUES ('SIM', 1, 1);
-INSERT INTO votos (voto, associado_id, sessao_id)
-VALUES ('SIM', 2, 1);
+INSERT INTO votos (id, voto, associado_id, sessao_id)
+VALUES (1, 'SIM', 1, 1);
+INSERT INTO votos (id, voto, associado_id, sessao_id)
+VALUES (2, 'SIM', 2, 1);
 
-INSERT INTO votos (voto, associado_id, sessao_id)
-VALUES ('NAO', 1, 2);
-INSERT INTO votos (voto, associado_id, sessao_id)
-VALUES ('NAO', 2, 2);
+INSERT INTO votos (id, voto, associado_id, sessao_id)
+VALUES (3, 'NAO', 1, 2);
+INSERT INTO votos (id, voto, associado_id, sessao_id)
+VALUES (4, 'NAO', 2, 2);
