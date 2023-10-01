@@ -1,6 +1,8 @@
 package com.db.api.controllers;
 
+import com.db.api.dtos.PautaDto;
 import com.db.api.dtos.SessaoDto;
+import com.db.api.dtos.request.PautaRequestSessao;
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.models.Sessao;
 import com.db.api.services.SessaoService;
@@ -28,8 +30,16 @@ public class SessaoController {
 
         return ResponseEntity.created(uri).body("Iniciada votação da pauta: " + sessaoDto.getPauta().getTitulo());
     }
+
     @GetMapping("/{id}/resultado")
     public ResponseEntity<SessaoResponse> obterResultadoSessao(@PathVariable Long id) {
         return ResponseEntity.ok().body(sessaoService.contabilizarVotos(id));
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<SessaoResponse> buscarSessaoPorID(@PathVariable Long id) {
+        Sessao sessao = sessaoService.buscarSessaoPorID(id);
+
+        return ResponseEntity.ok(new SessaoResponse(sessao.getPauta(), sessao.getDataEncerramento(), sessao.getResultadoSessao()));
     }
 }

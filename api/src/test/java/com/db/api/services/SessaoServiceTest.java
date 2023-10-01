@@ -2,8 +2,10 @@ package com.db.api.services;
 
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.enums.ResultadoSessao;
+import com.db.api.enums.StatusSessao;
 import com.db.api.enums.VotoEnum;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
+import com.db.api.exceptions.SessaoEncerradaException;
 import com.db.api.models.Pauta;
 import com.db.api.models.Sessao;
 import com.db.api.repositories.SessaoRepository;
@@ -44,11 +46,21 @@ class SessaoServiceTest {
     private EntityManager entityManager;
     private final Sessao sessaoTeste = SessaoStub.gerarSessaoAberta();
 
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         sessaoService = new SessaoService(sessaoRepository, pautaService, entityManager);
+    }
+
+    @Test
+    @DisplayName("Deve alterar o status da sessão para 'ENCERRADA'")
+    void testEncerrarSessao() {
+        Sessao sessao = SessaoStub.gerarSessaoAberta();
+        when(sessaoRepository.save(sessao)).thenReturn(sessao);
+
+        sessaoService.encerrarSessao(sessao);
+
+        assertEquals(StatusSessao.ENCERRADA, sessao.getStatusSessao());
     }
 
     @Test
@@ -143,5 +155,22 @@ class SessaoServiceTest {
         assertThrows(RegistroNaoEncontradoException.class, () -> sessaoService.contabilizarVotos(sessionId));
     }
 
+    @Test
+    @DisplayName("Deve buscar uma sessão com determinado id com sucesso")
+    void testObterSessaoPorID() {
+        Sessao sessao = SessaoStub.gerarSessaoAberta();
+        when(sessaoRepository.findById(sessao.getId())).thenReturn(Optional.of(sessao));
 
+        Sessao sessaoEncontrada = sessaoService.buscarSessaoPorID(sessao.getId());
+
+        assertEquals(sessao, sessaoEncontrada);
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma exceção ao buscar um associado por id inexistente ")
+    void testObterAssociadoPorIDInexistente() {
+        when(sessaoRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RegistroNaoEncontradoException.class, () -> sessaoService.buscarSessaoPorID(1L));
+    }
 }

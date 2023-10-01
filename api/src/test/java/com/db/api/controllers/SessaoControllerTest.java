@@ -9,12 +9,16 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+<<<<<<< Updated upstream
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+=======
+>>>>>>> Stashed changes
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
@@ -122,5 +126,36 @@ class SessaoControllerTest {
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.OK.value())
                 .body("resultadoSessao", equalTo("REPROVADA"));
+    }
+
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirPauta)
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirSessao)
+    @DisplayName("Deve buscar uma sessão pelo seu id com sucesso")
+    void testBuscarSessãodoPorID() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 2L)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("pauta.titulo", equalTo("Planejamento segundo semestre"))
+                .body("resultadoSessao", equalTo("APROVADA"));
+    }
+
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = resetarDB)
+    @DisplayName("Deve retornar uma exceção ao tentar buscar uma sessão por um id inexistente no banco")
+    void testBuscarSessaoPorIDInexistente() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(URL + "/{id}", 1L)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .contentType(ContentType.JSON)
+                .body("mensagem", equalTo("Registro não encontrado"))
+                .body("detalhes", hasItem("Sessão não encontrada."));
     }
 }
