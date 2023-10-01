@@ -9,8 +9,8 @@ public class ErrorResponse {
     private final String mensagem;
     private final List<String> detalhes;
 
-    public ErrorResponse(String message, List<String> details) {
+    public ErrorResponse(String message, List<String> detalhes) {
         this.mensagem = message;
-        this.detalhes = details;
+        this.detalhes = detalhes;
     }
 }
