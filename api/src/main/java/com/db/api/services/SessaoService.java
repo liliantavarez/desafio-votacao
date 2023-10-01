@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -79,39 +80,31 @@ public class SessaoService {
     @Transactional
     public SessaoResponse contabilizarVotos(Long sessaoId) {
         Sessao sessao = buscarSessaoPorID(sessaoId);
+
         if (sessao == null) {
-            throw new RegistroNaoEncontradoException("");
-        }
-        String querySQLContarVotos = "SELECT v.votoEnum, COUNT(v) FROM Voto v WHERE v.sessao.id = :sessaoId GROUP BY v.votoEnum";
-        TypedQuery<Object[]> query = entityManager.createQuery(querySQLContarVotos, Object[].class);
-        query.setParameter("sessaoId", sessaoId);
-        List<Object[]> results = query.getResultList();
-
-        long votosSim = 0;
-        long votosNao = 0;
-        for (Object[] result : results) {
-            VotoEnum votoEnum = (VotoEnum) result[0];
-            long count = (long) result[1];
-
-            if (votoEnum == VotoEnum.SIM) {
-                votosSim = count;
-            } else if (votoEnum == VotoEnum.NAO) {
-                votosNao = count;
-            }
+            throw new RegistroNaoEncontradoException("Sessão não encontrada.");
         }
 
-        definirResultadoSessao(sessao, votosSim, votosNao);
+        List<VotoEnum> votos = sessaoRepository.buscarVotosDaSessao(sessaoId);
+
+        Map<VotoEnum, Long> contagemVotos = votos.stream().collect(Collectors.groupingBy(voto -> voto, Collectors.counting()));
+
+        sessao.setResultadoSessao(definirResultadoSessao(contagemVotos));
 
         return new SessaoResponse(sessao.getPauta(), sessao.getDataEncerramento(), sessao.getResultadoSessao());
     }
 
-    private void definirResultadoSessao(Sessao sessao, Long votosSim, Long votosNao) {
-        if (votosSim > votosNao) {
-            sessao.setResultadoSessao(ResultadoSessao.APROVADA);
-        } else if (votosNao > votosSim) {
-            sessao.setResultadoSessao(ResultadoSessao.REPROVADA);
-        } else {
-            sessao.setResultadoSessao(ResultadoSessao.INDEFINIDA);
+    private ResultadoSessao definirResultadoSessao(Map<VotoEnum, Long> contagemVotos) {
+        long votosSim = contagemVotos.getOrDefault(VotoEnum.SIM, 0L);
+        long votosNao = contagemVotos.getOrDefault(VotoEnum.NAO, 0L);
+
+        switch (Long.compare(votosSim, votosNao)) {
+            case 1:
+                return ResultadoSessao.APROVADA;
+            case -1:
+                return ResultadoSessao.REPROVADA;
+            default:
+                return ResultadoSessao.INDEFINIDA;
         }
     }
 
