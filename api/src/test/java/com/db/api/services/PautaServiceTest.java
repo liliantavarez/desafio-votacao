@@ -2,8 +2,11 @@ package com.db.api.services;
 
 import com.db.api.dtos.PautaDto;
 import com.db.api.exceptions.ParametrosInvalidosException;
+import com.db.api.exceptions.RegistroNaoEncontradoException;
+import com.db.api.models.Associado;
 import com.db.api.models.Pauta;
 import com.db.api.repositories.PautaRepository;
+import com.db.api.stubs.AssociadoStub;
 import com.db.api.stubs.PautaStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,9 +16,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Testes para PautaService")
 class PautaServiceTest {
@@ -48,5 +55,24 @@ class PautaServiceTest {
 
         assertThrows(ParametrosInvalidosException.class, () ->
                 pautaService.criarNovaPauta(pautaDto));
+    }
+
+    @Test
+    @DisplayName("Deve buscar uma pauta com determinado id com sucesso")
+    void testObterPautaPorID() {
+        Pauta pauta = PautaStub.gerarPautaDtoValida();
+        when(pautaRepository.findById(pauta.getId())).thenReturn(Optional.of(pauta));
+
+        Pauta pautaEncontrada = pautaService.buscarPautaPorID(pauta.getId());
+
+        assertEquals(pauta, pautaEncontrada);
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma exceção ao buscar uma pauta por id inexistente ")
+    void testObterPautaPorIDInexistente() {
+        when(pautaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RegistroNaoEncontradoException.class, () -> pautaService.buscarPautaPorID(1L));
     }
 }
