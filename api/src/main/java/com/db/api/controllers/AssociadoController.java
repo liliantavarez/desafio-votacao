@@ -5,10 +5,7 @@ import com.db.api.models.Associado;
 import com.db.api.services.AssociadoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -28,6 +25,13 @@ public class AssociadoController {
         var uri = uriBuilder.path("/associados/{id}").buildAndExpand(associado.getId()).toUri();
 
         return ResponseEntity.created(uri).body(associadoDto);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<AssociadoDto> buscarAssociadoPorID(@PathVariable Long id){
+        Associado associado = associadoService.buscarAssociadoPorID(id);
+
+        return ResponseEntity.ok(new AssociadoDto(associado.getNome(), associado.getCpf()));
     }
 
 }
