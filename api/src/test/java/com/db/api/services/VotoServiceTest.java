@@ -46,6 +46,7 @@ class VotoServiceTest {
     private final Associado associado = AssociadoStub.gerarAssociadoDtoValida();
 
     @Test
+    @DisplayName("Deve registrar um voto com sucesso caso todos os dados sejam validos")
     void testRegistrarVoto() {
 
         when(sessaoService.validarSessao(votoDto.getSessao_id())).thenReturn(sessao);
@@ -59,6 +60,7 @@ class VotoServiceTest {
 
 
     @Test
+    @DisplayName("Deve retornar uma exceção caso o mesmo associado tente votar mais de uma vez na mesma sessão")
     void testRegistrarVotoDuplicado() {
         when(votoRepository.existsVotoBySessaoIdAndAssociadoCpf(votoDto.getSessao_id(), votoDto.getAssociado().getCpf())).thenReturn(true);
 
