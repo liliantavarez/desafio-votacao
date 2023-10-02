@@ -42,6 +42,10 @@ O serviço fica disponivel em:
 http://localhost:8080/swagger-ui/index.html
 ```
 
+## 🧪 Relatorio da cobertura de testes
+
+![cobertura de testes](https://github.com/liliantavarez/desafio-votacao/assets/51184806/bd523e9c-7f12-4684-8361-da68b4408f6a)
+
 ## Documentação da API
 
 #### Cadastra uma pauta
