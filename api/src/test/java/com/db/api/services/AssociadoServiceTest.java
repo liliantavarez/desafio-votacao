@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Testes para AssociadoService")
+@DisplayName("associadoServiceTest")
 class AssociadoServiceTest {
 
     @Mock
@@ -60,14 +60,15 @@ class AssociadoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve retornar uma exeção para associado com cpf inapto para votar")
     void testValidarSeAssociadoPodeVotar() {
         Associado associado = AssociadoStub.gerarAssociadoDtoValida();
         associado.setStatusCPF(StatusCPF.NAO_PODE_VOTAR);
 
         when(associadoRepository.findByCpf(associado.getCpf())).thenReturn(Optional.of(associado));
 
-        assertThrows(NaoPodeVotarException.class, () -> associadoService.validarAssociado((associado.getCpf())));
-    }
+        assertThrows(NaoPodeVotarException.class, () ->
+                associadoService.validarAssociado(associado.getCpf()));    }
 
     @Test
     @DisplayName("Deve buscar um associado com determinado id com sucesso")
