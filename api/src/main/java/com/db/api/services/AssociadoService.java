@@ -9,7 +9,6 @@ import com.db.api.models.Associado;
 import com.db.api.repositories.AssociadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 
@@ -40,7 +39,6 @@ public class AssociadoService {
         return associadoRepository.findByCpf(cpfAssociado).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
     }
 
-    @Transactional
     public Associado validarAssociado(String cpfAssociado) {
         Associado associado = buscarAssociadoPorCPF(cpfAssociado);
 

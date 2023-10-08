@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +29,6 @@ public class SessaoService {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Transactional
     public Sessao iniciarSessaoVotacao(@Valid String pautaTitulo, @Valid LocalDateTime dataEncerramento) {
         Pauta pauta = buscarPauta(pautaTitulo);
         Sessao sessao = criarSessao(pauta, dataEncerramento);
@@ -56,7 +54,6 @@ public class SessaoService {
         return sessao;
     }
 
-    @Transactional
     public Sessao validarSessao(long sessaoId) {
         Sessao sessao = buscarSessaoPorID(sessaoId);
 
@@ -71,13 +68,11 @@ public class SessaoService {
         return sessao;
     }
 
-    @Transactional
     public void encerrarSessao(Sessao sessao) {
         sessao.setStatusSessao(StatusSessao.ENCERRADA);
         sessaoRepository.save(sessao);
     }
 
-    @Transactional
     public SessaoResponse contabilizarVotos(Long sessaoId) {
         Sessao sessao = buscarSessaoPorID(sessaoId);
 
