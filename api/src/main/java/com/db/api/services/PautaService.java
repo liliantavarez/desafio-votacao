@@ -3,14 +3,11 @@ package com.db.api.services;
 import com.db.api.dtos.PautaDto;
 import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
-import com.db.api.models.Associado;
 import com.db.api.models.Pauta;
 import com.db.api.repositories.PautaRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

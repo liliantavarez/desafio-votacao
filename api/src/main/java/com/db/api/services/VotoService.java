@@ -4,7 +4,6 @@ import com.db.api.dtos.VotoDto;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
 import com.db.api.exceptions.VotoDuplicadoException;
 import com.db.api.models.Associado;
-import com.db.api.models.Pauta;
 import com.db.api.models.Sessao;
 import com.db.api.models.Voto;
 import com.db.api.repositories.VotoRepository;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import javax.validation.Validator;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +20,6 @@ public class VotoService {
     private final VotoRepository votoRepository;
     private final AssociadoService associadoService;
     private final SessaoService sessaoService;
-    private final Validator validator;
 
     @Transactional
     public void registrarVoto(@Valid VotoDto votoDto) {
