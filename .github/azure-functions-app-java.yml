@@ -12,7 +12,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: dev
     steps:
     - name: 'Checkout GitHub Action'
@@ -26,7 +26,7 @@ jobs:
     - name: 'Run Gradle Build'
       working-directory: ${{ env.GRADLE_PROJECT_DIRECTORY }}
       run: |
-        gradlew.bat build
+        ./gradlew build
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1

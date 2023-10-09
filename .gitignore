@@ -17,7 +17,7 @@
 
 # Generated files
 .idea/**/contentModel.xml
-.bin/**
+
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -31,18 +31,18 @@
 .idea/**/gradle.xml
 .idea/**/libraries
 
- Gradle and Maven with auto-import
- When using Gradle or Maven with auto-import, you should exclude module files,
- since they will be recreated, and may cause churn.  Uncomment if using
- auto-import.
- .idea/artifacts
- .idea/compiler.xml
- .idea/jarRepositories.xml
- .idea/modules.xml
- .idea/*.iml
- .idea/modules
- *.iml
- *.ipr
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
 
 # CMake
 cmake-build-*/
@@ -145,5 +145,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij+all
 .idea/sonarlint/issuestore/index.pb
 .idea/sonarlint/securityhotspotstore/index.pb
-api/src/main/resources/application-dev.properties
-*.pb
+
+.vscode
