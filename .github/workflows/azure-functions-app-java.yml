@@ -1,36 +1,59 @@
-name: Deploy Java project to Azure Function App
-
+name: CI
 on:
   push:
-    branches:
-      - develop
-
-env:
-  AZURE_FUNCTIONAPP_NAME: 'api-votacao'
-  GRADLE_PROJECT_DIRECTORY: '.'
-  JAVA_VERSION: '11'
-
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 jobs:
-  build-and-deploy:
+  build-without-cache:
     runs-on: ubuntu-latest
-    environment: dev
     steps:
-    - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v3
-
-    - name: Setup Java SDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v1
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-
-    - name: 'Run Gradle Build'
-      working-directory: ${{ env.GRADLE_PROJECT_DIRECTORY }}
-      run: |
-        ./gradlew build
-
-    - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
-      with:
-        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: './${{ env.GRADLE_PROJECT_DIRECTORY }}/build/libs'
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Build with Gradle
+        run: ./gradlew build --scan
+  build-with-setup-java-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+          cache: gradle
+      - name: Build with Gradle
+        run: ./gradlew build --scan --no-daemon
+  build-with-gradle-build-action-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --scan
+  build-with-upload-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+          cache: gradle
+      - name: Build with Gradle
+        run: ./gradlew build --scan --no-daemon
+      - name: Archive test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test report
+          path: build/reports/tests/test
