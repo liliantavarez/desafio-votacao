@@ -41,7 +41,4 @@ public class VotoService {
         }
     }
 
-    public Voto buscarVotoPorID(Long id) {
-        return votoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Voto não encontrado."));
-    }
 }

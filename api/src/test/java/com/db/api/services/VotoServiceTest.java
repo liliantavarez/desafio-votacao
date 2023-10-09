@@ -66,22 +66,5 @@ class VotoServiceTest {
 
         assertThrows(VotoDuplicadoException.class, () -> votoService.registrarVoto(votoDto));
     }
-    @Test
-    @DisplayName("Deve buscar um voto com determinado id com sucesso")
-    void testObterVotoPorID() {
-        Voto voto = VotoStub.gerarVotoValido();
-        when(votoRepository.findById(voto.getId())).thenReturn(Optional.of(voto));
 
-        Voto votoEncontrada = votoService.buscarVotoPorID(voto.getId());
-
-        assertEquals(voto, votoEncontrada);
-    }
-
-    @Test
-    @DisplayName("Deve retornar uma exceção ao buscar um voto por id inexistente ")
-    void testObterVotoPorIDInexistente() {
-        when(votoRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(RegistroNaoEncontradoException.class, () -> votoService.buscarVotoPorID(1L));
-    }
 }
