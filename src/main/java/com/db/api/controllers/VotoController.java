@@ -21,15 +21,7 @@ public class VotoController {
     ResponseEntity<String> registrarVoto(@RequestBody @Valid VotoDto votoDto) {
         votoService.registrarVoto(votoDto);
 
-
         return ResponseEntity.ok().body("Voto salvo com sucesso!");
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<VotoDto> buscarAssociadoPorID(@PathVariable Long id) {
-        Voto voto = votoService.buscarVotoPorID(id);
-        AssociadoRequestVoto associadoRequestVoto = new AssociadoRequestVoto(voto.getAssociado().getCpf());
-
-        return ResponseEntity.ok(new VotoDto(voto.getSessao().getId(), associadoRequestVoto, voto.getVotoEnum()));
-    }
 }
