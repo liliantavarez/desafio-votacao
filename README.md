@@ -160,6 +160,7 @@ POST /api/v1/votos/salvar
 | Parâmetro   | Tipo     | Local da Passagem |
 | :---------- | :------- | :---------------- |
 | `sessao_id` | `string` | Body (corpo da requisição) |
+| `associado_cpf` | `string` | Body (corpo da requisição) |
 | `votoEnum`  | `string` | Body (corpo da requisição) |
 
 Valores Aceitos para votoEnum:
