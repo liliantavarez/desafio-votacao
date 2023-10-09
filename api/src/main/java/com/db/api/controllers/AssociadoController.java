@@ -28,7 +28,7 @@ public class AssociadoController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<AssociadoDto> buscarAssociadoPorID(@PathVariable Long id){
+    ResponseEntity<AssociadoDto> buscarAssociadoPorID(@PathVariable Long id) {
         Associado associado = associadoService.buscarAssociadoPorID(id);
 
         return ResponseEntity.ok(new AssociadoDto(associado.getNome(), associado.getCpf()));
