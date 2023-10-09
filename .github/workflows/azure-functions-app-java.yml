@@ -26,7 +26,7 @@ jobs:
     - name: 'Run Gradle Build'
       working-directory: ${{ env.GRADLE_PROJECT_DIRECTORY }}
       run: |
-        ./gradlew build
+        gradlew.bat build
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
