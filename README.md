@@ -5,16 +5,16 @@
 ## 💻 Pré-requisitos
 
 - **Java 11 ou Superior**: É necessário ter o Java 11 ou uma versão mais recente instalada na sua máquina. Você pode verificar a versão do Java instalada usando o comando `java -version` no seu terminal.
-
+- **PostgreSQL (Opcional)**: Se você deseja usar um banco de dados PostgreSQL local, é necessário instalá-lo na sua máquina. Você pode fazer o download do PostgreSQL em https://www.postgresql.org/download/ e seguir as instruções de instalação.
+- **Docker (Opcional)**: Se preferir, você pode executar a aplicação com um banco de dados PostgreSQL em um contêiner Docker. Certifique-se de ter o Docker instalado na sua máquina. Você pode fazer o download do Docker em https://www.docker.com/get-started e seguir as instruções de instalação.
+  
 ## 🚀 Instalando desafio-votacao
 
 Para instalar o desafio-votacao, siga estas etapas:
 
-**Windows:**
+### Clonando o Repositório
 
-1. Abra seu terminal ou Prompt de Comando.
-
-2. Execute o seguinte comando para clonar o repositório:
+Abra seu terminal ou Prompt de Comando e execute o seguinte comando para clonar o repositório:
 
    ```
    git clone https://github.com/liliantavarez/desafio-votacao.git
@@ -22,29 +22,58 @@ Para instalar o desafio-votacao, siga estas etapas:
 
    Isso fará o download do projeto para o seu computador.
 
-3. Abra o projeto em seu IDE de preferência e o execute ou abra o terminal da sua IDE e executar o comando:
+### Configuração do Banco de Dados
+
+Banco de Dados Local
+
+Se você deseja usar um banco de dados PostgreSQL local, siga estas etapas:
+
+1. Certifique-se de que o PostgreSQL está instalado e em execução na sua máquina.
+2. Abra o arquivo application.properties localizado na pasta src/main/resources do projeto.
+3. No arquivo application.properties, atualize as seguintes configurações com as credenciais do seu banco de dados local:
+
+```
+DATABASE_PASSWORD=sua_senha_local
+DATABASE_USERNAME=seu_usuario_local
+DATABASE_URL=jdbc:postgresql://localhost:5432/seu_banco_local
+```
+
+Banco de Dados Docker
+
+Se você deseja usar um banco de dados PostgreSQL em um contêiner Docker, siga estas etapas:
+
+1. Navegue até a pasta raiz do projeto onde está localizado o arquivo docker-compose.yaml.
+2. Execute o seguinte comando para iniciar os contêineres em segundo plano (detached mode):
+   
+```
+docker-compose up -d
+```
+
+No arquivo application.properties, as configurações já devem estar ajustadas para funcionar com o banco de dados PostgreSQL em um contêiner Docker. Não é necessário fazer alterações.
+
+### Executando a Aplicação
+
+Abra o projeto em seu IDE de preferência ou abra o terminal da sua IDE e execute o seguinte comando para iniciar a aplicação:
 
    ```
    ./gradlew bootRun
    ```
    O projeto será iniciado localmente.
 
-4. Executando os testes:
+### Executando os testes:
+
+Você pode executar os testes da aplicação usando o seguinte comando:
 
    ```
    ./gradlew test
    ```
 
-O serviço fica disponivel em: 
-### [Swagger](http://localhost:8080/swagger-ui/index.html)
+### Acessando a API
+A aplicação estará disponível em:
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+Swagger: Você pode acessar a interface do Swagger para testar os endpoints da API em http://localhost:8080/swagger-ui/index.html.
 
 ## Documentação da API
-
-Aqui estão os endpoints separados por entidade na documentação e com informações sobre onde os parâmetros devem ser passados:
 
 ### Associação de Associados
 
