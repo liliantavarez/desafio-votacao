@@ -90,6 +90,54 @@
         }
       }
     },
+    "/api/v1/pautas/{id}": {
+      "get": {
+        "tags": [
+          "pautas"
+        ],
+        "summary": "Buscar uma pauta por ID",
+        "description": "Endpoint para buscar uma pauta por ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pauta encontrada com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PautaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pauta não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Registro não encontrado",
+                      "detalhes": [
+                        "A pauta requerida não foi encontrado!"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/associados/cadastrar": {
       "post": {
         "tags": [
@@ -148,6 +196,54 @@
         }
       }
     },
+    "/api/v1/associados/{id}": {
+      "get": {
+        "tags": [
+          "associados"
+        ],
+        "summary": "Buscar um associado por ID",
+        "description": "Endpoint para buscar um associado por ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associado encontrado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssociadoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Associado não encontrado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Registro não encontrado",
+                      "detalhes": [
+                        "Associado não encontrada."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/votos/salvar": {
       "post": {
         "tags": [
@@ -191,6 +287,7 @@
         }
       }
     },
+
     "/api/v1/sessoes/iniciarVotacao": {
       "post": {
         "tags": [
@@ -223,6 +320,54 @@
                       "mensagem": "Erro de validação",
                       "detalhes": [
                         "Por favor, informe a pauta para iniciar a sessão."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessoes/{id}": {
+      "get": {
+        "tags": [
+          "sessoes"
+        ],
+        "summary": "Buscar uma sessão de votação por ID",
+        "description": "Endpoint para buscar uma sessão de votação por ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sessão de votação encontrada com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessaoResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sessão de votação não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ErrorResponse": {
+                    "value": {
+                      "mensagem": "Registro não encontrado",
+                      "detalhes": [
+                        "Sessão não encontrada."
                       ]
                     }
                   }
