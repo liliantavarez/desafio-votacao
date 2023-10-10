@@ -1,4 +1,4 @@
-# Define a imagem base
+# Fase 1: Construção e testes
 FROM gradle:7.2.0-jdk11 AS build
 
 # Copie apenas os arquivos de build relacionados ao Gradle
@@ -14,7 +14,7 @@ COPY . .
 # Execute a tarefa Gradle para compilar o projeto
 RUN gradle build --no-daemon
 
-# Imagem base para a execução
+# Fase 2: Construção da imagem final
 FROM adoptopenjdk/openjdk11:jdk-11.0.12_7-alpine
 
 # Copie o arquivo JAR construído a partir do estágio anterior
