@@ -1,17 +1,11 @@
-# Fase 1: Construção e testes
+# Fase 1: Construção do projeto sem testes
 FROM gradle:7.2.0-jdk11 AS build
 
 # Copie apenas os arquivos de build relacionados ao Gradle
 COPY build.gradle settings.gradle ./
 COPY gradle ./gradle
 
-# Execute a tarefa Gradle para baixar dependências, mas não a compilação
-RUN gradle build --no-daemon || return 0
-
-# Copie todos os outros arquivos
-COPY . .
-
-# Execute a tarefa Gradle para compilar o projeto
+# Execute a tarefa Gradle para baixar dependências e compilar o projeto, sem testes
 RUN gradle build --no-daemon
 
 # Fase 2: Construção da imagem final
