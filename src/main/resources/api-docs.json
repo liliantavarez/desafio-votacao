@@ -25,7 +25,7 @@
     },
     {
       "name": "votos",
-      "description": "Registrar e consultar votos"
+      "description": "Salvar votos"
     },
     {
       "name": "sessoes",

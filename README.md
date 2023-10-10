@@ -102,7 +102,7 @@ GET /api/v1/associados/{id}
 
 | Parâmetro | Tipo     | Local da Passagem |
 | :-------- | :------- | :---------------- |
-| `id`      | `string` | Path (parâmetro da URL) |
+| `id`      | `integer` | Path (parâmetro da URL) |
 
 ### Pautas
 
@@ -131,7 +131,7 @@ GET /api/v1/pautas/{id}
 
 | Parâmetro | Tipo     | Local da Passagem |
 | :-------- | :------- | :---------------- |
-| `id`      | `string` | Path (parâmetro da URL) |
+| `id`      | `integer` | Path (parâmetro da URL) |
 
 ### Sessões de Votação
 
@@ -160,7 +160,7 @@ GET /api/v1/sessoes/{id}
 
 | Parâmetro | Tipo     | Local da Passagem |
 | :-------- | :------- | :---------------- |
-| `id`      | `string` | Path (parâmetro da URL) |
+| `id`      | `integer` | Path (parâmetro da URL) |
 
 #### Buscar Resultado de Votação por ID da Sessão
 
@@ -172,7 +172,7 @@ GET /api/v1/sessoes/{id}/resultado
 
 | Parâmetro | Tipo     | Local da Passagem |
 | :-------- | :------- | :---------------- |
-| `id`      | `string` | Path (parâmetro da URL) |
+| `id`      | `integer` | Path (parâmetro da URL) |
 
 ### Votos
 
@@ -188,7 +188,7 @@ POST /api/v1/votos/salvar
 
 | Parâmetro   | Tipo     | Local da Passagem |
 | :---------- | :------- | :---------------- |
-| `sessao_id` | `string` | Body (corpo da requisição) |
+| `sessao_id` | `integer` | Body (corpo da requisição) |
 | `associado_cpf` | `string` | Body (corpo da requisição) |
 | `votoEnum`  | `string` | Body (corpo da requisição) |
 
