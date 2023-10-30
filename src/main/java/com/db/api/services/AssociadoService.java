@@ -1,5 +1,6 @@
 package com.db.api.services;
 
+import com.db.api.client.response.ConsultaCPFResponse;
 import com.db.api.dtos.AssociadoDto;
 import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
@@ -11,12 +12,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class AssociadoService {
 
     private final AssociadoRepository associadoRepository;
+    private final ConsultaCPFService consultaCPFService;
 
     public void registrarAssociado(@Valid AssociadoDto associadoDto) {
         validarParametros(associadoDto);
@@ -41,15 +44,17 @@ public class AssociadoService {
 
     public Associado validarAssociado(String cpfAssociado) {
         Associado associado = buscarAssociadoPorCPF(cpfAssociado);
+        ConsultaCPFResponse consultaCPF = consultaCPFService.verificarSituacaoCPF(associado.getCpf());
 
-        if (associado.getStatusCPF() == StatusCPF.NAO_PODE_VOTAR) {
+        if (!Objects.equals(consultaCPF.getSituacao(), "Regular")) {
+            associado.setStatusCPF(StatusCPF.NAO_PODE_VOTAR);
             throw new NaoPodeVotarException();
         }
 
         return associado;
     }
 
-    public Associado buscarAssociadoPorID(Long id){
+    public Associado buscarAssociadoPorID(Long id) {
         return associadoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
     }
 }

@@ -1,7 +1,7 @@
 package com.db.api.services;
 
+import com.db.api.client.response.ConsultaCPFResponse;
 import com.db.api.dtos.AssociadoDto;
-import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.NaoPodeVotarException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
@@ -29,9 +29,12 @@ class AssociadoServiceTest {
 
     @Mock
     private AssociadoRepository associadoRepository;
-
+    @Mock
+    private ConsultaCPFService consultaCPFService;
     @InjectMocks
     private AssociadoService associadoService;
+
+    private final ConsultaCPFResponse consultaCPFResponse = new ConsultaCPFResponse();
 
     @BeforeEach
     public void setUp() {
@@ -60,21 +63,24 @@ class AssociadoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma exeção para associado com cpf inapto para votar")
+    @DisplayName("Deve retornar uma exceção para associado com cpf inapto para votar")
     void testValidarSeAssociadoPodeVotar() {
         Associado associado = AssociadoStub.gerarAssociadoDtoValida();
-        associado.setStatusCPF(StatusCPF.NAO_PODE_VOTAR);
 
         when(associadoRepository.findByCpf(associado.getCpf())).thenReturn(Optional.of(associado));
 
+        consultaCPFResponse.setSituacao("Cancelada");
+        when(consultaCPFService.verificarSituacaoCPF(associado.getCpf())).thenReturn(consultaCPFResponse);
+
         assertThrows(NaoPodeVotarException.class, () ->
-                associadoService.validarAssociado(associado.getCpf()));    }
+                associadoService.validarAssociado(associado.getCpf()));
+    }
 
     @Test
     @DisplayName("Deve buscar um associado com determinado id com sucesso")
     void testObterAssociadoPorID() {
         Associado associado = AssociadoStub.gerarAssociadoDtoValida();
-        when(associadoRepository.findById(associado.getId())).thenReturn(Optional.ofNullable(associado));
+        when(associadoRepository.findById(associado.getId())).thenReturn(Optional.of(associado));
 
         Associado associadoEncontrada = associadoService.buscarAssociadoPorID(associado.getId());
 
