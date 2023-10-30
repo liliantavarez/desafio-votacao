@@ -3,7 +3,12 @@
   "info": {
     "title": "API - Votação de Pautas",
     "description": "A API de Votação é uma plataforma que permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações. Essa API foi desenvolvida para facilitar a administração de processos de votação em diversos contextos, desde assembleias até decisões internas de uma organização.",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "contact": {
+      "email": "liliancarvalhotavares@gmail.com",
+      "name": "Lilian Carvalho Tavares",
+      "url": "https://github.com/liliantavarez"
+    }
   },
   "externalDocs": {
     "description": "Saiba mais sobre Swagger",
