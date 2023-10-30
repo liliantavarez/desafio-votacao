@@ -2,6 +2,7 @@ package com.db.api.exceptions.handlers;
 
 import com.db.api.exceptions.*;
 import com.db.api.models.ErrorResponse;
+import feign.FeignException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,21 +47,25 @@ public class ExceptionHandlingControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse("CPF já cadastrado", Collections.singletonList(ex.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(VotoDuplicadoException.class)
     public ResponseEntity<ErrorResponse> handleVotoDuplicadoException(VotoDuplicadoException ex) {
         ErrorResponse errorResponse = new ErrorResponse("Voto duplicado", Collections.singletonList(ex.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(SessaoEncerradaException.class)
     public ResponseEntity<ErrorResponse> handleSessaoEncerradaException(SessaoEncerradaException ex) {
         ErrorResponse errorResponse = new ErrorResponse("Sessão encerrada", Collections.singletonList(ex.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(NaoPodeVotarException.class)
     public ResponseEntity<ErrorResponse> handleCpfInaptoException(NaoPodeVotarException ex) {
         ErrorResponse errorResponse = new ErrorResponse("CPF inapto", Collections.singletonList(ex.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(RegistroNaoEncontradoException.class)
     public ResponseEntity<ErrorResponse> handleRegistroNaoEncontradoException(RegistroNaoEncontradoException ex) {
         ErrorResponse errorResponse = new ErrorResponse("Registro não encontrado", Collections.singletonList(ex.getMessage()));
@@ -79,4 +84,10 @@ public class ExceptionHandlingControllerAdvice {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("CPF inválido",
+                Collections.singletonList("CPF inválido ou em situação irregular"));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
