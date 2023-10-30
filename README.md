@@ -200,6 +200,10 @@ Valores Aceitos para votoEnum:
 
 Certifique-se de utilizar um desses valores exatamente como indicado ao fazer uma requisição para a API.
 
+## 🎲 Modelagem de dados
+![exported_from_idea drawio](https://github.com/liliantavarez/desafio-votacao/assets/51184806/9601ba09-3a2e-4ad7-a189-fb47c7f9a0d8)
+
+
 ## 👨‍💻 Tecnologias Utilizadas
 
 Essas foram as principais tecnologias e bibliotecas utilizadas no projeto "desafio-votacao" afim de garantir a conformidade com as regras de validação, gerenciar o esquema do banco de dados e fornecer documentação e testes integrados.
