@@ -204,7 +204,7 @@ Certifique-se de utilizar um desses valores exatamente como indicado ao fazer um
 
 Essas foram as principais tecnologias e bibliotecas utilizadas no projeto "desafio-votacao" afim de garantir a conformidade com as regras de validação, gerenciar o esquema do banco de dados e fornecer documentação e testes integrados.
 
-1. **Spring Boot (2.7.17)**: O Spring Boot é uma estrutura poderosa para a criação de aplicativos Java com facilidade. Ele oferece uma configuração simplificada, desenvolvimento baseado em anotações e um ecossistema maduro que facilita o desenvolvimento e a manutenção de aplicativos. A versão 2.7.17 é usada para garantir suporte a longo prazo (LTS).
+1. **Spring Boot (2.7.17)**: O Spring Boot é uma estrutura poderosa para a criação de aplicativos Java com facilidade. Ele oferece uma configuração simplificada, desenvolvimento baseado em anotações e um ecossistema maduro que facilita o desenvolvimento e a manutenção de aplicativos. 
 
 2. **Spring Cloud OpenFeign**: O Spring Cloud OpenFeign é uma parte do Spring Cloud que oferece uma maneira mais simples de criar clientes HTTP para serviços REST. Isso é útil para se comunicar com outras APIs, como a de consulta de CPF.
 
