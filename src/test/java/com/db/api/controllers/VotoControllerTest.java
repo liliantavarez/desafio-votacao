@@ -1,6 +1,8 @@
 package com.db.api.controllers;
 
 import com.db.api.stubs.VotoStub;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.Options;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,10 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
@@ -29,6 +30,7 @@ import static org.hamcrest.Matchers.hasItem;
         @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = inserirAssociado),
 })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = Options.DYNAMIC_PORT)
 class VotoControllerTest {
 
     private final String URL = "/api/v1/votos";
@@ -48,6 +50,12 @@ class VotoControllerTest {
     @Test
     @DisplayName("Deve registrar voto de um associado valido em uma sessão existente com sucesso")
     void deveRegistrarVotoComSucesso() {
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/5ae973d7a997af13f0aaf2bf60e65803/9/44271476072"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"situacao\":\"Regular\"}")));
+
         given()
                 .contentType(ContentType.JSON)
                 .body(VotoStub.gerarVotoDtoValida())
