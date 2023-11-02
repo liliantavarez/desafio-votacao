@@ -42,7 +42,7 @@ class AssociadoControllerTest {
     @Test
     @DisplayName("Deve registrar um associado com sucesso")
     void deveRegistrarAssociadoComSucesso() {
-        RestAssured.given()
+        given()
                 .contentType(ContentType.JSON)
                 .body(AssociadoStub.gerarAssociadoDtoValida())
                 .when()
