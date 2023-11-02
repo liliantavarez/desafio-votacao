@@ -68,7 +68,7 @@ Você pode executar os testes da aplicação usando o seguinte comando:
    ./gradlew test
    ```
 
-### Acessando a API
+## 🔥 Acessando a API
 A aplicação estará disponível em:
 
 **Swagger**: Você pode acessar a interface do Swagger localmente para testar os endpoints da API em http://localhost:8080/swagger-ui/index.html. Além disso, a API também está implantada no OnRender e pode ser acessada em https://api-votacao.onrender.com/swagger-ui/index.html.
