@@ -71,7 +71,7 @@ Você pode executar os testes da aplicação usando o seguinte comando:
 ### Acessando a API
 A aplicação estará disponível em:
 
-Swagger: Você pode acessar a interface do Swagger para testar os endpoints da API em http://localhost:8080/swagger-ui/index.html.
+**Swagger**: Você pode acessar a interface do Swagger localmente para testar os endpoints da API em http://localhost:8080/swagger-ui/index.html. Além disso, a API também está implantada no OnRender e pode ser acessada em https://api-votacao.onrender.com/swagger-ui/index.html.
 
 ## 📖 Documentação da API
 
@@ -230,3 +230,6 @@ Essas foram as principais tecnologias e bibliotecas utilizadas no projeto "desaf
 
 11. **Springdoc OpenAPI (Swagger)**: O Springdoc OpenAPI é uma biblioteca que gera automaticamente documentação interativa da API (usando o Swagger) com base nas anotações do Spring. Isso ajuda os desenvolvedores a entender e testar a API facilmente.
 
+12. **WireMock**: Usado para realizar teste de integração com a API que consulta a situação do CPF, pois permite testar o comportamento da aplicação em relação a esses serviços sem a necessidade de ambientes reais de desenvolvimento ou testes.
+
+13. **Docker**: O Docker é usado para criar contêineres isolados para a aplicação e o banco de dados PostgreSQL. Isso garante um ambiente de desenvolvimento e testes consistente e reproduzível, além de facilitar a implantação da aplicação em servidores, como o OnRender.
