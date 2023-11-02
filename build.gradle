@@ -39,6 +39,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.3.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     annotationProcessor 'org.projectlombok:lombok'
@@ -55,5 +56,5 @@ tasks.named('test') {
 }
 
 springBoot {
-    mainClass = 'com.db.api.ApiApplicatio'
+    mainClass = 'com.db.api.ApiApplication'
 }
