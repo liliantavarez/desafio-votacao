@@ -12,13 +12,8 @@
   },
   "externalDocs": {
     "description": "Saiba mais sobre Swagger",
-    "url": "http://swagger.io"
+    "url": "https://swagger.io"
   },
-  "servers": [
-    {
-      "url": "http://localhost:8080"
-    }
-  ],
   "tags": [
     {
       "name": "pautas",
