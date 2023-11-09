@@ -26,7 +26,7 @@ public class VotoService {
         associadoJaVotou(votoDto);
 
         Sessao sessao = sessaoService.validarSessao(votoDto.getSessao_id());
-        Associado associado = associadoService.validarAssociado(votoDto.getAssociado().getCpf());
+        Associado associado = associadoService.validarAssociadoParaVotacao(votoDto.getAssociado().getCpf());
 
         Voto voto = new Voto(sessao, associado, votoDto.getVotoEnum());
         votoRepository.save(voto);
