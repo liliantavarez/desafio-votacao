@@ -1,5 +1,6 @@
 package com.db.api.stubs;
 
+import com.db.api.dtos.request.AssociadoRequest;
 import com.db.api.dtos.request.AssociadoRequestVoto;
 import com.db.api.models.Associado;
 
@@ -7,6 +8,13 @@ public interface AssociadoStub {
     static Associado gerarAssociadoDtoValida() {
         return Associado.builder()
                 .id(1L)
+                .nome("Carla Silva")
+                .cpf("44271476072")
+                .build();
+    }
+
+    static AssociadoRequest gerarAssociadoRequest() {
+        return AssociadoRequest.builder()
                 .nome("Carla Silva")
                 .cpf("44271476072")
                 .build();

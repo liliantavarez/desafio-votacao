@@ -2,6 +2,7 @@ package com.db.api.services;
 
 import com.db.api.client.response.ConsultaCPFResponse;
 import com.db.api.dtos.AssociadoDto;
+import com.db.api.dtos.request.AssociadoRequest;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.NaoPodeVotarException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
@@ -44,22 +45,25 @@ class AssociadoServiceTest {
     @Test
     @DisplayName("Ao criar um novo associado com valores válidos, o método save do repositório deve ser chamado")
     void registrarAssociado_ComValoresValidos() {
-        AssociadoDto associadoDto = new AssociadoDto(AssociadoStub.gerarAssociadoDtoValida().getNome(), AssociadoStub.gerarAssociadoDtoValida().getCpf());
+        AssociadoRequest associadoRequest = AssociadoStub.gerarAssociadoRequest();
 
-        associadoService.registrarAssociado(associadoDto);
+        when(associadoRepository.save(any(Associado.class))).thenReturn(AssociadoStub.gerarAssociadoDtoValida());
+
+        AssociadoDto associadoDto = associadoService.cadastrarAssociado(associadoRequest);
 
         verify(associadoRepository, Mockito.times(1)).save(any(Associado.class));
+        assertEquals(associadoRequest.getNome(), associadoDto.getNome());
+        assertEquals(associadoRequest.getCpf(), associadoDto.getCpf());
     }
 
     @Test
     @DisplayName("Ao tentar cadastrar um associado com CPF já cadastrado, deve retornar exceção de associado já cadastrado")
     void registrarAssociado_ComCpfJaCadastrado() {
-        AssociadoDto associadoDto = new AssociadoDto(AssociadoStub.gerarAssociadoDtoValida().getNome(), AssociadoStub.gerarAssociadoDtoValida().getCpf());
-
-        when(associadoRepository.existsAssociadoByCpf(associadoDto.getCpf())).thenReturn(true);
+        AssociadoRequest associadoRequest = AssociadoStub.gerarAssociadoRequest();
+        when(associadoRepository.existsAssociadoByCpf(associadoRequest.getCpf())).thenReturn(true);
 
         assertThrows(AssociadoJaCadastradoException.class, () ->
-                associadoService.registrarAssociado(associadoDto));
+                associadoService.cadastrarAssociado(associadoRequest));
     }
 
     @Test
@@ -73,7 +77,7 @@ class AssociadoServiceTest {
         when(consultaCPFService.verificarSituacaoCPF(associado.getCpf())).thenReturn(consultaCPFResponse);
 
         assertThrows(NaoPodeVotarException.class, () ->
-                associadoService.validarAssociado(associado.getCpf()));
+                associadoService.validarAssociadoParaVotacao(associado.getCpf()));
     }
 
     @Test
@@ -82,9 +86,9 @@ class AssociadoServiceTest {
         Associado associado = AssociadoStub.gerarAssociadoDtoValida();
         when(associadoRepository.findById(associado.getId())).thenReturn(Optional.of(associado));
 
-        Associado associadoEncontrada = associadoService.buscarAssociadoPorID(associado.getId());
+        AssociadoDto associadoEncontrada = associadoService.buscarAssociadoPorID(associado.getId());
 
-        assertEquals(associado, associadoEncontrada);
+        assertEquals(associado.getCpf(), associadoEncontrada.getCpf());
     }
 
     @Test
