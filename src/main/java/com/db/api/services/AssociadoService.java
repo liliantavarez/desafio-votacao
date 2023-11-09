@@ -2,6 +2,7 @@ package com.db.api.services;
 
 import com.db.api.client.response.ConsultaCPFResponse;
 import com.db.api.dtos.AssociadoDto;
+import com.db.api.dtos.request.AssociadoRequest;
 import com.db.api.enums.StatusCPF;
 import com.db.api.exceptions.AssociadoJaCadastradoException;
 import com.db.api.exceptions.NaoPodeVotarException;
@@ -21,15 +22,16 @@ public class AssociadoService {
     private final AssociadoRepository associadoRepository;
     private final ConsultaCPFService consultaCPFService;
 
-    public void registrarAssociado(@Valid AssociadoDto associadoDto) {
-        validarParametros(associadoDto);
+    public AssociadoDto cadastrarAssociado(@Valid AssociadoRequest associadoRequest) {
+        verificaSeAssociadoJaEstaCadastrado(associadoRequest);
 
-        Associado associado = new Associado(associadoDto.getNome(), associadoDto.getCpf());
-        associadoRepository.save(associado);
+        Associado associadoCadastrado = associadoRepository.save(new Associado(associadoRequest.getNome(), associadoRequest.getCpf()));
+
+        return new AssociadoDto(associadoCadastrado.getId(), associadoCadastrado.getNome(), associadoCadastrado.getCpf());
     }
 
-    private void validarParametros(AssociadoDto associadoDto) {
-        if (associadoCadastrado(associadoDto.getCpf())) {
+    private void verificaSeAssociadoJaEstaCadastrado(AssociadoRequest associadoRequest) {
+        if (associadoCadastrado(associadoRequest.getCpf())) {
             throw new AssociadoJaCadastradoException();
         }
     }
@@ -42,20 +44,24 @@ public class AssociadoService {
         return associadoRepository.findByCpf(cpfAssociado).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
     }
 
-    public Associado validarAssociado(String cpfAssociado) {
+    public Associado validarAssociadoParaVotacao(String cpfAssociado) {
         Associado associado = buscarAssociadoPorCPF(cpfAssociado);
-        ConsultaCPFResponse consultaCPF = consultaCPFService.verificarSituacaoCPF(associado.getCpf());
-
-        if (!Objects.equals(consultaCPF.getSituacao(), "Regular")) {
-            associado.setStatusCPF(StatusCPF.NAO_PODE_VOTAR);
-            throw new NaoPodeVotarException();
-        }
+        validarSituacaoCPF(associado.getCpf());
 
         return associado;
     }
 
-    public Associado buscarAssociadoPorID(Long id) {
-        return associadoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
+    public AssociadoDto buscarAssociadoPorID(Long id) {
+        Associado associado = associadoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Associado não encontrada."));
+        return new AssociadoDto(associado.getNome(), associado.getCpf());
+    }
+
+    private void validarSituacaoCPF(String cpf) {
+        ConsultaCPFResponse consultaCPF = consultaCPFService.verificarSituacaoCPF(cpf);
+
+        if (!Objects.equals(consultaCPF.getSituacao(), "Regular")) {
+            throw new NaoPodeVotarException();
+        }
     }
 }
 
