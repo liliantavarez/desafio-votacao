@@ -1,6 +1,7 @@
 package com.db.api.controllers;
 
 import com.db.api.dtos.AssociadoDto;
+import com.db.api.dtos.request.AssociadoRequest;
 import com.db.api.models.Associado;
 import com.db.api.services.AssociadoService;
 import lombok.AllArgsConstructor;
@@ -17,21 +18,19 @@ public class AssociadoController {
 
     private final AssociadoService associadoService;
 
-    @PostMapping("/cadastrar")
-    ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoDto associadoDto, UriComponentsBuilder uriBuilder) {
-        associadoService.registrarAssociado(associadoDto);
-        Associado associado = new Associado(associadoDto.getNome(), associadoDto.getNome());
+    @PostMapping()
+    ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoRequest associadoRequest, UriComponentsBuilder uriBuilder) {
+        AssociadoDto associadoCadastrado = associadoService.cadastrarAssociado(associadoRequest);
 
-        var uri = uriBuilder.path("/associados/{id}").buildAndExpand(associado.getId()).toUri();
+        var uri = uriBuilder.path("/associados/{id}").buildAndExpand(associadoCadastrado.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(associadoDto);
+        return ResponseEntity.created(uri).body(associadoCadastrado);
     }
 
     @GetMapping("/{id}")
     ResponseEntity<AssociadoDto> buscarAssociadoPorID(@PathVariable Long id) {
-        Associado associado = associadoService.buscarAssociadoPorID(id);
 
-        return ResponseEntity.ok(new AssociadoDto(associado.getNome(), associado.getCpf()));
+        return ResponseEntity.ok(associadoService.buscarAssociadoPorID(id));
     }
 
 }
