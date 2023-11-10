@@ -4,13 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PautaDto {
-    @NotBlank(message = "Por favor, informe o titulo da pauta.")
+    private long id;
     private String titulo;
     private String descricao;
+
+    public PautaDto(String titulo, String descricao) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+    }
 }
