@@ -18,7 +18,7 @@ public class AssociadoController {
 
     private final AssociadoService associadoService;
 
-    @PostMapping()
+    @PostMapping
     ResponseEntity<AssociadoDto> registrarAssociado(@RequestBody @Valid AssociadoRequest associadoRequest, UriComponentsBuilder uriBuilder) {
         AssociadoDto associadoCadastrado = associadoService.cadastrarAssociado(associadoRequest);
 

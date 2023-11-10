@@ -18,7 +18,7 @@ public class PautaController {
 
     private final PautaService pautaService;
 
-    @PostMapping()
+    @PostMapping
     ResponseEntity<PautaDto> criarPauta(@RequestBody @Valid PautaRequest pautaRequest, UriComponentsBuilder uriBuilder) {
         PautaDto pautaCadastrada = pautaService.criarNovaPauta(pautaRequest);
 

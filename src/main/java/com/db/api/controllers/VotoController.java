@@ -17,7 +17,7 @@ public class VotoController {
 
     private final VotoService votoService;
 
-    @PostMapping()
+    @PostMapping
     ResponseEntity<String> registrarVoto(@RequestBody @Valid VotoDto votoDto) {
         votoService.registrarVoto(votoDto);
 
