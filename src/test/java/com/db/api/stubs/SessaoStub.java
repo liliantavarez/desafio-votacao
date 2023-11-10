@@ -1,7 +1,7 @@
 package com.db.api.stubs;
 
+import com.db.api.dtos.request.SessaoRequest;
 import com.db.api.enums.StatusSessao;
-import com.db.api.models.Pauta;
 import com.db.api.models.Sessao;
 
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ public interface SessaoStub {
                 .statusSessao(StatusSessao.ABERTA)
                 .build();
     }
+
     static Sessao gerarSessaoEncerrada() {
         return Sessao.builder()
                 .id(2L)
@@ -30,10 +31,18 @@ public interface SessaoStub {
                 .statusSessao(StatusSessao.ENCERRADA)
                 .build();
     }
+
     static Sessao gerarSessaoDtoDataEncerramentoInvalida() {
         return Sessao.builder()
                 .pauta(PautaStub.gerarPautaDtoValida())
                 .dataEncerramento(LocalDateTime.parse("2023-09-10T12:00:00"))
+                .build();
+    }
+
+    static SessaoRequest gerarSessaoRequest() {
+        return SessaoRequest.builder()
+                .pauta(PautaStub.gerarPautaRequestSessao())
+                .dataEncerramento(LocalDateTime.now().plusMinutes(60))
                 .build();
     }
 

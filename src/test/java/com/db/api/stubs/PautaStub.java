@@ -1,6 +1,7 @@
 package com.db.api.stubs;
 
 import com.db.api.dtos.request.PautaRequest;
+import com.db.api.dtos.request.PautaRequestSessao;
 import com.db.api.models.Pauta;
 
 public interface PautaStub {
@@ -29,6 +30,12 @@ public interface PautaStub {
         return PautaRequest.builder()
                 .titulo("Novas funcionalidades")
                 .descricao("Discussão sobre a adição de notificações à aplicação.")
+                .build();
+    }
+
+    static PautaRequestSessao gerarPautaRequestSessao() {
+        return PautaRequestSessao.builder()
+                .titulo("Novas funcionalidades")
                 .build();
     }
 
