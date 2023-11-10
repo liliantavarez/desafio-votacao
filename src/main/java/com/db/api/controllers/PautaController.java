@@ -1,6 +1,7 @@
 package com.db.api.controllers;
 
 import com.db.api.dtos.PautaDto;
+import com.db.api.dtos.request.PautaRequest;
 import com.db.api.models.Pauta;
 import com.db.api.services.PautaService;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,12 @@ public class PautaController {
     private final PautaService pautaService;
 
     @PostMapping()
-    ResponseEntity<PautaDto> criarPauta(@RequestBody @Valid PautaDto pautaDto, UriComponentsBuilder uriBuilder) {
-        pautaService.criarNovaPauta(pautaDto);
-        Pauta pauta = new Pauta(pautaDto.getTitulo(), pautaDto.getDescricao());
+    ResponseEntity<PautaDto> criarPauta(@RequestBody @Valid PautaRequest pautaRequest, UriComponentsBuilder uriBuilder) {
+        PautaDto pautaCadastrada = pautaService.criarNovaPauta(pautaRequest);
 
-        var uri = uriBuilder.path("/pautas/{id}").buildAndExpand(pauta.getId()).toUri();
+        var uri = uriBuilder.path("/pautas/{id}").buildAndExpand(pautaCadastrada.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(pautaDto);
+        return ResponseEntity.created(uri).body(pautaCadastrada);
     }
 
     @GetMapping("/{id}")
