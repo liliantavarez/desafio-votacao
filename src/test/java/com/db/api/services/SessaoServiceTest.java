@@ -1,5 +1,7 @@
 package com.db.api.services;
 
+import com.db.api.dtos.SessaoDto;
+import com.db.api.dtos.request.SessaoRequest;
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.enums.ResultadoSessao;
 import com.db.api.enums.StatusSessao;
@@ -65,13 +67,16 @@ class SessaoServiceTest {
     @Test
     @DisplayName("Ao criar iniciar uma nova sessão de votação com valores válidos, o método save do repositório deve ser chamado\"")
     void testIniciarSessaoVotacaComDadosValidos() {
-
+        SessaoRequest sessaoRequest = SessaoStub.gerarSessaoRequest();
         Pauta pauta = PautaStub.gerarPautaDtoValida();
-        when(pautaService.buscarPauta(pauta.getTitulo())).thenReturn(pauta);
 
-        sessaoService.iniciarSessaoVotacao(pauta.getTitulo(), SessaoStub.gerarSessaoDtoValida().getDataEncerramento());
+        when(pautaService.buscarPauta(pauta.getTitulo())).thenReturn(pauta);
+        when(sessaoRepository.save(any(Sessao.class))).thenReturn(SessaoStub.gerarSessaoDtoValida());
+
+        SessaoDto sessaoIniciada = sessaoService.iniciarSessaoVotacao(sessaoRequest.getPauta().getTitulo(), sessaoRequest.getDataEncerramento());
 
         verify(sessaoRepository, times(1)).save(any(Sessao.class));
+        assertEquals(sessaoIniciada.getPauta().getTitulo(), sessaoRequest.getPauta().getTitulo());
     }
 
     @Test
