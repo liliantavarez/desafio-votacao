@@ -1,5 +1,7 @@
 package com.db.api.services;
 
+import com.db.api.dtos.SessaoDto;
+import com.db.api.dtos.request.PautaRequestSessao;
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.enums.ResultadoSessao;
 import com.db.api.enums.StatusSessao;
@@ -29,15 +31,17 @@ public class SessaoService {
     @PersistenceContext
     EntityManager entityManager;
 
-    public Sessao iniciarSessaoVotacao(@Valid String pautaTitulo, @Valid LocalDateTime dataEncerramento) {
+    public SessaoDto iniciarSessaoVotacao(@Valid String pautaTitulo, @Valid LocalDateTime dataEncerramento) {
         Pauta pauta = buscarPauta(pautaTitulo);
-        Sessao sessao = criarSessao(pauta, dataEncerramento);
 
         if (pauta == null) {
             throw new RegistroNaoEncontradoException("Pauta não encontrada.");
         }
 
-        return sessaoRepository.save(sessao);
+        Sessao sessaoIniciada = sessaoRepository.save(criarSessao(pauta, dataEncerramento));
+        PautaRequestSessao pautaRequestSessao = new PautaRequestSessao(sessaoIniciada.getPauta().getTitulo());
+
+        return new SessaoDto(sessaoIniciada.getId(), pautaRequestSessao, sessaoIniciada.getDataEncerramento());
     }
 
     private Pauta buscarPauta(String pautaTitulo) {

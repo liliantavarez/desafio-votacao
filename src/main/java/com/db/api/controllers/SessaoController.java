@@ -1,6 +1,7 @@
 package com.db.api.controllers;
 
 import com.db.api.dtos.SessaoDto;
+import com.db.api.dtos.request.SessaoRequest;
 import com.db.api.dtos.response.SessaoResponse;
 import com.db.api.models.Sessao;
 import com.db.api.services.SessaoService;
@@ -21,12 +22,12 @@ public class SessaoController {
 
     @Transactional
     @PostMapping()
-    public ResponseEntity<String> iniciarSessaoVotacao(@RequestBody @Valid SessaoDto sessaoDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> iniciarSessaoVotacao(@RequestBody @Valid SessaoRequest sessaoRequest, UriComponentsBuilder uriBuilder) {
+        SessaoDto sessaoIniciada = sessaoService.iniciarSessaoVotacao(sessaoRequest.getPauta().getTitulo(), sessaoRequest.getDataEncerramento());
 
-        Sessao sessao = sessaoService.iniciarSessaoVotacao(sessaoDto.getPauta().getTitulo(), sessaoDto.getDataEncerramento());
-        var uri = uriBuilder.path("/sessoes/{id}").buildAndExpand(sessao.getId()).toUri();
+        var uri = uriBuilder.path("/sessoes/{id}").buildAndExpand(sessaoIniciada.getId()).toUri();
 
-        return ResponseEntity.created(uri).body("Iniciada votação da pauta: " + sessaoDto.getPauta().getTitulo());
+        return ResponseEntity.created(uri).body("Iniciada votação da pauta: " + sessaoIniciada.getPauta().getTitulo());
     }
 
     @GetMapping("/{id}/resultado")
