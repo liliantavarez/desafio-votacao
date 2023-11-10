@@ -1,12 +1,11 @@
 package com.db.api.services;
 
 import com.db.api.dtos.PautaDto;
+import com.db.api.dtos.request.PautaRequest;
 import com.db.api.exceptions.ParametrosInvalidosException;
 import com.db.api.exceptions.RegistroNaoEncontradoException;
-import com.db.api.models.Associado;
 import com.db.api.models.Pauta;
 import com.db.api.repositories.PautaRepository;
-import com.db.api.stubs.AssociadoStub;
 import com.db.api.stubs.PautaStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,20 +40,24 @@ class PautaServiceTest {
     @Test
     @DisplayName("Ao criar uma nova pauta com valores válidos, o método save do repositório deve ser chamado")
     void criarNovaPauta_comValoresValidos() {
-        PautaDto pautaDto = new PautaDto(PautaStub.gerarPautaDtoValida().getTitulo(), PautaStub.gerarPautaDtoValida().getDescricao());
+        PautaRequest pautaRequest = PautaStub.gerarPautaRequest();
 
-        pautaService.criarNovaPauta(pautaDto);
+        when(pautaRepository.save(any(Pauta.class))).thenReturn(PautaStub.gerarPautaDtoValida());
+
+        PautaDto pautaCadastrada = pautaService.criarNovaPauta(pautaRequest);
 
         verify(pautaRepository, Mockito.times(1)).save(any(Pauta.class));
+        assertEquals(pautaCadastrada.getTitulo(), pautaRequest.getTitulo());
+        assertEquals(pautaCadastrada.getDescricao(), pautaRequest.getDescricao());
     }
 
     @Test
     @DisplayName("Ao criar uma nova pauta sem titulo, deve retornar exceção")
     void criarNovaPauta_comTituloEmBranco() {
-        PautaDto pautaDto = new PautaDto(PautaStub.gerarPautaDtoTituloVazio().getTitulo(), PautaStub.gerarPautaDtoTituloVazio().getDescricao());
+        PautaRequest pautaRequest = PautaStub.gerarPautaDtoTituloVazio();
 
         assertThrows(ParametrosInvalidosException.class, () ->
-                pautaService.criarNovaPauta(pautaDto));
+                pautaService.criarNovaPauta(pautaRequest));
     }
 
     @Test
