@@ -84,7 +84,7 @@ Endpoints para a entidade "Associado":
 Cadastra um associado no sistema.
 
 ```http
-POST /api/v1/associados/cadastrar
+POST /api/v1/associados
 ```
 
 | Parâmetro | Tipo     | Local da Passagem |
@@ -113,7 +113,7 @@ Endpoints para a entidade "Pauta":
 Cadastra uma pauta no sistema.
 
 ```http
-POST /api/v1/pautas/cadastrar
+POST /api/v1/pautas
 ```
 
 | Parâmetro   | Tipo     | Local da Passagem |
@@ -142,7 +142,7 @@ Endpoints para a entidade "Sessão de Votação":
 Inicia uma sessão de votação para uma pauta específica.
 
 ```http
-POST /api/v1/sessoes/iniciarVotacao
+POST /api/v1/sessoes
 ```
 
 | Parâmetro          | Tipo     | Local da Passagem |
@@ -183,7 +183,7 @@ Endpoints para a entidade "Voto":
 Salva o voto de um associado em uma sessão de votação.
 
 ```http
-POST /api/v1/votos/salvar
+POST /api/v1/votos
 ```
 
 | Parâmetro   | Tipo     | Local da Passagem |
