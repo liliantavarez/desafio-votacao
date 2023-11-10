@@ -20,7 +20,7 @@ public class SessaoController {
     private final SessaoService sessaoService;
 
     @Transactional
-    @PostMapping("/iniciarVotacao")
+    @PostMapping()
     public ResponseEntity<String> iniciarSessaoVotacao(@RequestBody @Valid SessaoDto sessaoDto, UriComponentsBuilder uriBuilder) {
 
         Sessao sessao = sessaoService.iniciarSessaoVotacao(sessaoDto.getPauta().getTitulo(), sessaoDto.getDataEncerramento());
