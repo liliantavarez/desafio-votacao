@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessaoDto {
+    private long id;
     private PautaRequestSessao pauta;
-    @Future
     private LocalDateTime dataEncerramento;
 }
