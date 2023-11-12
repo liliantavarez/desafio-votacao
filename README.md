@@ -1,13 +1,19 @@
 # API - Votação
 
-> A API de Votação permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações.
+> A API de Votação permite a realização de votações em pautas específicas. Ela oferece uma interface para criar novas pautas, registrar votos e consultar os resultados das votações.</br>
+> Este projeto abrange diversos aspectos, desde a definição das entidades e endpoints até a configuração do ambiente com Docker.
+
+
+### Estrutura do Projeto
+A implementação segue uma estrutura modular, dividida em pacotes distintos para melhor organização e manutenção do código. 
+Temos seções dedicadas a entidades como client, config, controllers, dtos, enums, exception, models, repositories e services.
 
 ## 💻 Pré-requisitos
 
 - **Java 11 ou Superior**: É necessário ter o Java 11 ou uma versão mais recente instalada na sua máquina. Você pode verificar a versão do Java instalada usando o comando `java -version` no seu terminal.
 - **PostgreSQL (Opcional)**: Se você deseja usar um banco de dados PostgreSQL local, é necessário instalá-lo na sua máquina. Você pode fazer o download do PostgreSQL em https://www.postgresql.org/download/ e seguir as instruções de instalação.
 - **Docker (Opcional)**: Se preferir, você pode executar a aplicação com um banco de dados PostgreSQL em um contêiner Docker. Certifique-se de ter o Docker instalado na sua máquina. Você pode fazer o download do Docker em https://www.docker.com/get-started e seguir as instruções de instalação.
-  
+
 ## 🚀 Instalando desafio-votacao
 
 Para instalar o desafio-votacao, siga estas etapas:
@@ -71,7 +77,17 @@ Você pode executar os testes da aplicação usando o seguinte comando:
 ## 🔥 Acessando a API
 A aplicação estará disponível em:
 
-**Swagger**: Você pode acessar a interface do Swagger localmente para testar os endpoints da API em http://localhost:8080/swagger-ui/index.html. Além disso, a API também está implantada no OnRender e pode ser acessada em https://api-votacao.onrender.com/swagger-ui/index.html.
+- Swagger Local: http://localhost:8080/swagger-ui/index.html
+- OnRender: https://api-votacao.onrender.com/swagger-ui/index.html
+
+O Swagger é utilizado para gerar documentação automática da API. 
+O arquivo api-docs.json descreve detalhadamente cada endpoint, suas entradas e saídas, proporcionando uma visão clara das funcionalidades disponíveis e 
+facilitando a compreensão e utilização da API. 
+
+## 🔁 Comunicação Externa 
+Com o objetivo de verificar a situação do CPF, foi incorporada uma chamada à API externa ([API - CPF.CNPJ](https://www.cpfcnpj.com.br/dev/)). 
+Essa integração não apenas valida, mas também enriquece os dados dos associados, proporcionando uma camada adicional de verificação </br>
+e aprimorando a qualidade das informações obtidas. Além disso, para facilitar testes e assegurar a robustez do sistema, foi implementado o uso do WireMock, uma ferramenta que simula serviços externos, permitindo testes mais abrangentes e eficazes da integração.
 
 ## 📖 Documentação da API
 
@@ -201,8 +217,10 @@ Valores Aceitos para votoEnum:
 Certifique-se de utilizar um desses valores exatamente como indicado ao fazer uma requisição para a API.
 
 ## 🎲 Modelagem de dados
-![exported_from_idea drawio](https://github.com/liliantavarez/desafio-votacao/assets/51184806/9601ba09-3a2e-4ad7-a189-fb47c7f9a0d8)
+O modelo de dados é representado por entidades como Pauta, Associado, Voto, e Sessao. 
+Essas entidades refletem as principais componentes do sistema, permitindo o registro de pautas, associados, votos, e sessões de votação.
 
+![exported_from_idea drawio](https://github.com/liliantavarez/desafio-votacao/assets/51184806/9601ba09-3a2e-4ad7-a189-fb47c7f9a0d8)
 
 ## 👨‍💻 Tecnologias Utilizadas
 
@@ -233,3 +251,8 @@ Essas foram as principais tecnologias e bibliotecas utilizadas no projeto "desaf
 12. **WireMock**: Usado para realizar teste de integração com a API que consulta a situação do CPF, pois permite testar o comportamento da aplicação em relação a esses serviços sem a necessidade de ambientes reais de desenvolvimento ou testes.
 
 13. **Docker**: O Docker é usado para criar contêineres isolados para a aplicação e o banco de dados PostgreSQL. Isso garante um ambiente de desenvolvimento e testes consistente e reproduzível, além de facilitar a implantação da aplicação em servidores, como o OnRender.
+
+
+## 🤗 Considerações Finais
+A solução apresentada aborda de maneira abrangente os requisitos do desafio, desde a modelagem de dados até a implementação de chamadas externas e a disponibilização da API com Docker, cada aspecto foi cuidadosamente tratado.</br>
+Este projeto demonstra não apenas a implementação das funcionalidades propostas, mas também a aplicação de boas práticas de desenvolvimento, desde a modelagem cuidadosa dos dados até a integração de serviços externos, a configuração Docker e documentação eficaz. 
